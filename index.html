@@ -1426,10 +1426,10 @@ function progressTab(body){
 /* ---------- backup ---------- */
 function backupText(){return JSON.stringify({app:'oa-drills',ver:2,exported:new Date().toISOString(),store});}
 function backupExport(box){
-  const txt=backupText(),name=`oa-drills-backup-${today()}.json`;
-  box.innerHTML=`<p class="note">Save the file, or copy the text and keep it somewhere safe.</p><div class="btn-row"><button class="primary" type="button" data-b="file">Save file</button><button class="ghost" type="button" data-b="copy">Copy text</button></div><textarea class="bk-text" readonly></textarea><p class="msg"></p>`;
+  const txt=backupText(),name=`oa-drills-backup-${today()}.json`;let framed=false;try{framed=window.self!==window.top;}catch(e){framed=true;}
+  box.innerHTML=`<p class="note">${framed?'Copy the text, then paste it into Import progress in the installed app.':'Save the file, or copy the text and keep it somewhere safe.'}</p><div class="btn-row">${framed?'':'<button class="primary" type="button" data-b="file">Save file</button>'}<button class="${framed?'primary':'ghost'}" type="button" data-b="copy">Copy text</button></div><textarea class="bk-text" readonly></textarea><p class="msg"></p>`;
   const ta=box.querySelector('textarea'),msg=box.querySelector('.msg');ta.value=txt;
-  box.querySelector('[data-b="file"]').addEventListener('click',()=>{try{const u=URL.createObjectURL(new Blob([txt],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);msg.textContent='File saved to your downloads.';}catch(e){msg.textContent='Saving a file is blocked here. Copy the text instead.';}});
+  const fb=box.querySelector('[data-b="file"]');if(fb)fb.addEventListener('click',()=>{try{const u=URL.createObjectURL(new Blob([txt],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);msg.textContent='File saved to your downloads.';}catch(e){msg.textContent='Saving a file is blocked here. Copy the text instead.';}});
   box.querySelector('[data-b="copy"]').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(txt);msg.textContent='Copied.';}catch(e){ta.focus();ta.select();msg.textContent='Select all the text in the box and copy it.';}});
 }
 function backupImport(box){
