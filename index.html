@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-title" content="OA drills">
+<title>OA drills</title>
+<meta name="theme-color" content="#1D2B4A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="Mental math, sequence and probability drills with a skill ladder and a speed matrix.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --paper:#E8EDE7;--grid:#D5DDD5;--sheet:#F9FBF8;--ink:#1D2B4A;--ink-2:#56627A;--line:#CBD4CC;
+  --hl:#F2DF45;--hl-ink:#1D2B4A;--warn:#EFA196;--red:#BF3A2B;--green:#2A7556;--press:#E0E7E0;
+  --bal-a:#3C6CD6;--bal-b:#E3862A;--mark:#F2DF45;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A16;--grid:#1A2520;--sheet:#17221D;--ink:#E3E9E4;--ink-2:#9BA89F;--line:#2B3A33;
+    --hl:#E2CD43;--hl-ink:#15201B;--warn:#7A3127;--red:#F07B63;--green:#5EC497;--press:#22312A;
+    --bal-a:#6D96F0;--bal-b:#F0A156;--mark:#5E5620;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A16;--grid:#1A2520;--sheet:#17221D;--ink:#E3E9E4;--ink-2:#9BA89F;--line:#2B3A33;
+  --hl:#E2CD43;--hl-ink:#15201B;--warn:#7A3127;--red:#F07B63;--green:#5EC497;--press:#22312A;
+  --bal-a:#6D96F0;--bal-b:#F0A156;--mark:#5E5620;color-scheme:dark;
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);touch-action:manipulation}
+body{height:100%;margin:0;background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;color:var(--ink);
+  font:400 16px/1.45 "Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+#app{height:100%;overflow-y:auto;overscroll-behavior:contain}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+h1,h2,p{margin:0}
+.page{max-width:560px;margin:0 auto;padding:22px 20px 40px}
+
+/* home */
+.home-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-top:6px}
+.title{font-weight:900;font-size:clamp(46px,14vw,68px);line-height:.92;letter-spacing:-.035em}
+.title .mark{background:linear-gradient(transparent 58%,var(--mark) 58%,var(--mark) 90%,transparent 90%);padding:0 .06em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.theme-btn{flex:none;background:var(--sheet);border:1.5px solid var(--ink);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:600;margin-top:6px}
+.lede{margin:14px 0 30px;color:var(--ink-2);max-width:38ch}
+.sec{margin-bottom:28px}
+.sec h2{font-size:23px;font-weight:850;letter-spacing:-.015em;line-height:1.15}
+.sec-note{margin:2px 0 10px;color:var(--ink-2);font-size:14.5px}
+.rows{background:var(--sheet);border:1.5px solid var(--ink);border-radius:5px;overflow:hidden}
+.row{display:flex;align-items:center;gap:14px;width:100%;padding:13px 14px;background:none;border:0;border-top:1px solid var(--line);text-align:left}
+.row:first-child{border-top:0}
+.row:active{background:var(--press)}
+.r-main{display:flex;flex-direction:column;min-width:0}
+.r-name{font-weight:750;font-size:18px;line-height:1.2}
+.r-desc{font-size:14px;color:var(--ink-2);line-height:1.3;margin-top:2px}
+.r-score{margin-left:auto;text-align:right;font-weight:800;font-size:16px;white-space:nowrap}
+.r-score small{display:block;font-weight:500;font-size:12.5px;color:var(--ink-2)}
+.foot{font-size:13.5px;color:var(--ink-2);margin-top:4px;max-width:40ch}
+
+/* intro */
+.back{background:none;border:0;padding:8px 0;color:var(--ink-2);font-weight:600}
+.page-title{font-weight:900;font-size:clamp(40px,12vw,56px);letter-spacing:-.03em;line-height:1;margin:10px 0 14px}
+.howto{max-width:40ch}
+.howto p+p{margin-top:8px}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:18px;padding:14px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:5px;text-align:left;font-weight:600}
+.toggle b{font-weight:800;min-width:3ch;text-align:right;color:var(--ink-2)}
+.toggle[aria-pressed="true"] b{color:var(--green)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{background:var(--sheet);border:1.5px solid var(--ink);border-radius:999px;padding:8px 14px;font-weight:600;font-size:15px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.hist{margin-top:22px}
+.hist-line{font-weight:700}
+.spark{display:block;width:100%;height:auto;color:var(--ink);margin:8px 0 0}
+.start{margin-top:24px}
+.primary{display:block;width:100%;min-height:58px;border:0;border-radius:6px;background:var(--ink);color:var(--sheet);font-weight:800;font-size:18px}
+.primary:active{opacity:.85}
+.ghost{display:block;width:100%;min-height:52px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:6px;font-weight:700}
+.ghost:active{background:var(--press)}
+
+/* drill shell */
+.drill{display:flex;flex-direction:column;height:100%;max-width:560px;margin:0 auto;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.bar{display:flex;align-items:center;gap:10px;padding:8px 14px 4px}
+.quit{background:none;border:0;padding:8px 2px;color:var(--ink-2);font-weight:600}
+.bar-title{font-weight:800;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-score{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:900;font-size:24px;min-width:2ch;text-align:right}
+.clock{display:flex;align-items:center;gap:10px;height:36px;margin:2px 14px 0}
+.clock-track{position:relative;flex:1;height:30px}
+.clock-fill{position:absolute;inset:0;background:var(--hl);border-radius:4px 11px 5px 12px/11px 5px 12px 4px;transform-origin:left center}
+.clock.low .clock-fill{background:var(--warn)}
+.clock-text{flex:none;font-variant-numeric:tabular-nums;min-width:4.2ch;text-align:right;font-weight:800;font-size:18px}
+.clock.hidden{visibility:hidden}
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 18px;text-align:center;overflow-y:auto}
+.stage.top{justify-content:flex-start;padding-top:16px}
+.controls{padding:8px 14px 14px}
+.controls>.msg{text-align:center}
+.qnum{color:var(--ink-2);font-size:14px;font-weight:600}
+
+/* mental math */
+.problem{font-weight:850;letter-spacing:-.02em;line-height:1.05;white-space:nowrap;margin-top:6px}
+.problem.s1{font-size:clamp(50px,15.5vw,80px)}
+.problem.s2{font-size:clamp(38px,11.5vw,62px)}
+.problem.s3{font-size:clamp(30px,9vw,50px)}
+.mc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{min-height:72px;padding:6px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:6px;font-weight:800;font-size:26px}
+.opt:active{background:var(--press)}
+.opt.is-right{background:var(--green);border-color:var(--green);color:var(--sheet)}
+.opt.is-wrong{background:var(--red);border-color:var(--red);color:var(--sheet)}
+.opt.is-answer{box-shadow:inset 0 0 0 4px var(--green)}
+.skip{display:block;margin:8px auto 0;background:none;border:0;padding:8px 16px;color:var(--ink-2);font-weight:600;font-size:15px}
+
+/* keypad */
+.keypad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.key{height:56px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:6px;font-weight:750;font-size:24px}
+.key.span2{grid-column:span 2}
+.key-ok{background:var(--ink);color:var(--sheet);font-size:17px;font-weight:800}
+.key.down{background:var(--press)}
+.key-ok.down{background:var(--ink);opacity:.8}
+.key-off{visibility:hidden}
+.entry{min-width:5ch;min-height:62px;margin-top:16px;padding:0 10px;border-bottom:3px solid var(--ink);font-weight:850;font-size:44px;line-height:60px}
+.hint{font-size:13.5px;color:var(--ink-2);margin-top:8px}
+
+/* sequences */
+.seq{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px 8px;width:100%;margin-top:10px;font-weight:850;font-size:clamp(24px,7.2vw,34px);line-height:1.2}
+.ti{white-space:nowrap}
+.t{display:inline-block;padding:2px 5px;border-radius:4px}
+.t.hole{min-width:2.4ch;border:2px dashed var(--ink);color:var(--ink-2)}
+.t.reveal{background:var(--hl);color:var(--hl-ink)}
+.fb{margin-top:18px;max-width:36ch;text-align:left;font-size:16px}
+.fb p+p{margin-top:6px}
+.verdict{font-weight:850;font-size:20px}
+.fb.ok .verdict{color:var(--green)}
+.fb.bad .verdict{color:var(--red)}
+.exact{color:var(--ink-2);font-size:14.5px}
+
+/* odds */
+.oq{font-size:19px;font-weight:600;line-height:1.42;text-align:left;max-width:34ch;margin-top:6px}
+.ostack{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ostack .opt{min-height:60px;font-size:22px}
+.next-btn{margin-top:10px}
+
+/* pincode */
+.pin-show{height:1.15em;font-weight:900;font-size:clamp(110px,34vw,160px);line-height:1.15}
+.msg{min-height:1.45em;font-size:15px;color:var(--ink-2);margin-top:10px}
+.msg .good{color:var(--green)}
+.msg .bad{color:var(--red)}
+
+/* code compare */
+.cc-target{margin-top:12px;padding:10px 16px;background:var(--sheet);border:2px solid var(--ink);border-radius:6px;font-weight:800;font-size:clamp(30px,9.5vw,46px);letter-spacing:.14em}
+.cc-window{width:100%;max-width:320px;height:6px;margin:14px auto 0;background:var(--line);border-radius:3px;overflow:hidden}
+.cc-window i{display:block;height:100%;background:var(--ink);transform-origin:left center}
+.cc-opts{display:grid;gap:8px}
+.cc-opts .opt{min-height:54px;font-size:24px;letter-spacing:.14em}
+
+/* task switch */
+.ts{display:grid;grid-template-rows:1fr 1fr;width:100%;max-width:380px;height:min(50vh,360px);background:var(--sheet);border:2px solid var(--ink);border-radius:6px;overflow:hidden;transition:background-color .15s}
+.ts.flash-ok{background:color-mix(in srgb,var(--green) 22%,var(--sheet))}
+.ts.flash-bad{background:color-mix(in srgb,var(--red) 25%,var(--sheet))}
+.ts-half{position:relative;display:flex;align-items:center;justify-content:center}
+.ts-half+.ts-half{border-top:2px dashed var(--line)}
+.ts-label{position:absolute;top:8px;left:12px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.ts-stim{font-weight:900;font-size:clamp(52px,16vw,72px);letter-spacing:.02em}
+.ts-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ts-btn{min-height:96px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:6px;font-weight:700;font-size:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.ts-btn b{font-size:34px;line-height:1}
+.ts-btn:active{background:var(--press)}
+
+/* balloon */
+.bal-svg{display:block;width:min(62vw,250px);height:auto}
+.bal-string{stroke:var(--ink-2);stroke-width:2}
+.bal-pop{font-weight:900;font-size:46px;fill:var(--red);opacity:0}
+.bal-pop.on{opacity:1}
+.bal-g.popping{animation:pop .3s ease-out forwards;transform-box:fill-box;transform-origin:center}
+@keyframes pop{to{transform:scale(1.4);opacity:0}}
+.bal-stats{display:flex;justify-content:center;gap:40px;margin-top:4px}
+.bal-stats div{text-align:center}
+.bal-stats span{display:block;font-size:13px;color:var(--ink-2)}
+.bal-stats b{font-size:28px;font-weight:850}
+.bal-btns{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+.bal-btns button{min-height:76px}
+
+/* make the target */
+.mt-target{font-size:14px;color:var(--ink-2);font-weight:600}
+.mt-target b{display:block;font-size:clamp(56px,17vw,76px);font-weight:900;line-height:1;color:var(--ink)}
+.mt-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:320px;margin-top:14px}
+.tile{min-height:74px;background:var(--sheet);border:2px solid var(--ink);border-radius:6px;font-weight:850;font-size:32px}
+.tile.sel{background:var(--hl);color:var(--hl-ink)}
+.tile.gone{visibility:hidden}
+.mt-ops{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mt-op{min-height:58px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:6px;font-weight:850;font-size:28px}
+.mt-op.sel{background:var(--ink);color:var(--sheet)}
+.mt-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.mt-tools .ghost{min-height:46px;font-size:15px}
+
+/* results */
+.res-title{margin-top:12px;font-weight:700;color:var(--ink-2)}
+.res-big{font-weight:900;font-size:clamp(80px,26vw,128px);line-height:.95;letter-spacing:-.045em;margin-top:4px}
+.res-unit{margin-left:10px;font-size:18px;font-weight:700;letter-spacing:0;color:var(--ink-2)}
+.pb{display:inline-block;margin-top:8px;padding:3px 10px;background:var(--hl);color:var(--hl-ink);font-weight:800;border-radius:4px 10px 5px 11px}
+.res-lines{display:grid;grid-template-columns:1fr auto;gap:8px 16px;margin:22px 0 0;padding:14px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:5px}
+.res-lines dt{color:var(--ink-2)}
+.res-lines dd{margin:0;font-weight:750;text-align:right}
+.h-sm{font-size:17px;font-weight:800;margin:24px 0 6px}
+.tbl{overflow-x:auto}
+.brk{width:100%;border-collapse:collapse;background:var(--sheet);border:1.5px solid var(--ink);font-size:15px}
+.brk th,.brk td{padding:9px 8px;border-top:1px solid var(--line);text-align:right}
+.brk th{border-top:0;font-weight:700;color:var(--ink-2)}
+.brk th:first-child,.brk td:first-child{text-align:left}
+.misses{list-style:none;margin:0;padding:0;background:var(--sheet);border:1.5px solid var(--ink);border-radius:5px}
+.misses li{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-top:1px solid var(--line);font-size:15px}
+.misses li:first-child{border-top:0}
+.misses .you{color:var(--red);white-space:nowrap}
+.note{margin-top:16px;max-width:40ch}
+.res-actions{display:grid;gap:10px;margin-top:28px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@font-face{font-family:"Schibsted Grotesk";font-style:normal;font-display:swap;font-weight:400 900;src:url(fonts/schibsted-grotesk-latin-wght-normal.woff2) format("woff2")}
+b.good,span.good{color:var(--green)}
+b.bad,span.bad{color:var(--red)}
+.head-btns{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;margin:18px 0 22px;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--sheet)}
+.tab{background:none;border:0;padding:10px 0;font-weight:750;font-size:16px}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--sheet)}
+.warm{display:block;width:100%;text-align:left;padding:16px;margin:0 0 6px;border:0;border-radius:6px;background:var(--ink);color:var(--sheet)}
+.warm:active{opacity:.88}
+.warm b{display:block;font-size:21px;font-weight:850}
+.warm span{display:block;font-size:14.5px;opacity:.82;margin-top:3px;line-height:1.35}
+.code{flex:none;min-width:3.1em;padding:3px 0;border:1.5px solid var(--ink);border-radius:4px;font-size:13px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums}
+.code.t{border-style:dashed;color:var(--ink-2);font-weight:700;font-size:12px}
+.row.is-next .code{background:var(--hl);color:var(--hl-ink);border-color:var(--hl)}
+.row.is-done .code{background:var(--ink);color:var(--sheet)}
+.nx{display:block;width:max-content;margin:0 0 3px auto;padding:1px 7px;border-radius:3px;background:var(--hl);color:var(--hl-ink);font-size:12px;font-weight:800}
+.st{display:block;font-size:13px;font-weight:700;color:var(--ink-2)}
+.st.ok{color:var(--green)}
+.r-name em{font-style:normal;font-size:12px;font-weight:600;color:var(--ink-2);margin-left:4px}
+.kicker{margin-top:10px;font-weight:700;color:var(--ink-2);font-size:14px}
+.page-title.sm{font-size:clamp(32px,9vw,44px);margin-top:4px}
+.card{margin-top:18px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:5px}
+.card summary{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;font-weight:800;cursor:pointer;list-style:none}
+.card summary::-webkit-details-marker{display:none}
+.card summary::after{content:"+";font-size:20px;line-height:1}
+.card[open] summary::after{content:"\2212"}
+.card-body{padding:0 14px 14px;font-size:15.5px;line-height:1.5}
+.card-body p+p,.card-body p+ul,.card-body ul+p,.card-body p+ol,.card-body ol+p{margin-top:8px}
+.card-body ul,.card-body ol{margin:0;padding-left:20px}
+.card-body li+li{margin-top:6px}
+.sub{color:var(--ink-2);font-weight:600;font-size:15px;margin-top:4px}
+.problem sup{font-size:.55em}
+.unit{font-weight:850;font-size:30px;margin-left:4px;color:var(--ink-2)}
+.fbline{margin-top:16px;max-width:30ch;font-size:19px;font-weight:600;line-height:1.35}
+.fbline .bad{font-weight:850}
+.mc2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mc2 .opt{min-height:88px;font-size:22px}
+.op-chips{margin-top:12px}
+.op-chips .chip{min-width:52px;font-size:19px;font-weight:800}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:14px 0 10px;font-size:13px;color:var(--ink-2)}
+.legend i{display:inline-block;width:12px;height:12px;margin-right:5px;border-radius:2px;vertical-align:-1px}
+.mgrid{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:2px;-webkit-user-select:none;user-select:none}
+.mg{aspect-ratio:1;min-width:0;padding:0;border:0;border-radius:3px;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+.mg.h{background:none;color:var(--ink-2)}
+.f-g0{background:var(--line)}
+.f-red{background:color-mix(in srgb,var(--red) 72%,var(--sheet))}
+.f-yellow{background:var(--hl);color:var(--hl-ink)}
+.f-green{background:var(--green);color:var(--sheet)}
+.mg.sel,.fchip.sel{outline:3px solid var(--ink);outline-offset:1px;position:relative;z-index:1}
+.cell-info{min-height:3em;margin-top:12px;font-size:14.5px;line-height:1.4}
+.chip-title{margin:14px 0 6px;font-weight:700;font-size:15px}
+.fchips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{min-width:48px;padding:8px 6px;border:0;border-radius:4px;font-weight:750;font-size:15px}
+.sel-panel{position:sticky;bottom:0;z-index:2;margin:0 -20px 28px;padding:10px 20px calc(10px + env(safe-area-inset-bottom,0px));background:var(--paper);border-top:1.5px solid var(--ink)}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.sel-panel .btn-row{margin-top:0}
+.btn-row .ghost,.btn-row .primary{display:inline-flex;align-items:center;width:auto;min-height:46px;padding:0 15px;font-size:15px}
+.file-btn{cursor:pointer;font-weight:700;border:1.5px solid var(--ink);border-radius:6px;background:var(--sheet)}
+textarea.bk-text{display:block;width:100%;min-height:110px;margin-top:10px;padding:8px;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--sheet);border:1.5px solid var(--ink);border-radius:5px}
+.res-actions .ghost+.ghost{margin-top:0}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(()=>{
+'use strict';
+/*PURE-START*/
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a;}
+const range=n=>Array.from({length:n},(_,i)=>i);
+const MINUS='\u2212';
+function fmt(x){let s=String(+(+x).toFixed(6));if(s==='-0')s='0';return s.replace('-',MINUS);}
+function num(x){return String(x).replace('-',MINUS);}
+function decPlaces(x){const s=String(+Math.abs(x).toFixed(6));const i=s.indexOf('.');return i<0?0:s.length-i-1;}
+function fr(n,d){if(d<0){n=-n;d=-d;}const g=gcd(n,d)||1;return{n:n/g,d:d/g};}
+function frStr(f){if(f.d===1)return fmt(f.n);return(f.n<0?MINUS:'')+Math.abs(f.n)+'/'+f.d;}
+function fracText(n,d){return frStr(fr(n,d));}
+function parseAns(s){s=String(s).replace(/\u2212/g,'-').trim();if(!s)return NaN;if(s.indexOf('/')>=0){const p=s.split('/');if(p.length!==2||p[0]===''||p[1]==='')return NaN;const x=Number(p[0]),y=Number(p[1]);if(!isFinite(x)||!isFinite(y)||y===0)return NaN;return x/y;}const v=Number(s);return isFinite(v)?v:NaN;}
+function near(a,b){return Math.abs(a-b)<=1e-6*Math.max(1,Math.abs(b));}
+
+/* ---------- mental math ---------- */
+function genDec(){
+  const t=R(0,4);
+  if(t===0){const a=R(11,999)/pick([10,100]),b=R(11,999)/pick([10,100]);return{q:`${fmt(a)} + ${fmt(b)}`,x:a+b};}
+  if(t===1){let a=R(101,9999)/100,b=R(11,999)/pick([10,100]);if(b>a){const s=a;a=b;b=s;}return{q:`${fmt(a)} ${MINUS} ${fmt(b)}`,x:a-b};}
+  if(t===2){const v=R(0,3);let a,b;
+    if(v===0){a=R(1,9)/10;b=R(12,99);}
+    else if(v===1){a=pick([0.25,0.75,1.5,2.5,1.25]);b=R(4,48)*4;}
+    else if(v===2){a=R(2,9)/10;b=R(2,9)/10;}
+    else{a=R(11,99)/10;b=R(2,9);}
+    return{q:`${fmt(a)} × ${fmt(b)}`,x:a*b};}
+  if(t===3){const v=R(0,2);
+    if(v===0){const d=R(2,9)/10,q=R(2,40);return{q:`${fmt(q*d)} ÷ ${fmt(d)}`,x:q};}
+    if(v===1){const b=pick([2,4,5,8,20,25]);let a=R(3,99);while(a%b===0)a=R(3,99);return{q:`${a} ÷ ${b}`,x:a/b};}
+    const d=R(11,25)/100,q=R(2,12);return{q:`${fmt(q*d)} ÷ ${fmt(d)}`,x:q};}
+  const a=R(11,99)/10,b=pick([2,4,5,1.5,2.5,0.5]);return{q:`${fmt(a)} × ${fmt(b)}`,x:a*b};
+}
+function genFrac(){
+  const t=R(0,4),b=R(2,9),d=R(2,9),a=R(1,b-1),c=R(1,d-1);
+  if(t===0)return{q:`${a}/${b} + ${c}/${d}`,f:fr(a*d+c*b,b*d),wrong:{n:a+c,d:b+d}};
+  if(t===1){if(a*d===c*b)return genFrac();let p=a,q=b,r=c,s=d;if(a/b<c/d){p=c;q=d;r=a;s=b;}return{q:`${p}/${q} ${MINUS} ${r}/${s}`,f:fr(p*s-r*q,q*s),wrong:{n:Math.abs(p-r),d:Math.abs(q-s)}};}
+  if(t===2)return{q:`${a}/${b} × ${c}/${d}`,f:fr(a*c,b*d),wrong:{n:a*d,d:b*c}};
+  if(t===3)return{q:`${a}/${b} ÷ ${c}/${d}`,f:fr(a*d,b*c),wrong:{n:a*c,d:b*d}};
+  const n=b*R(2,20);return{q:`${a}/${b} of ${n}`,x:a*n/b};
+}
+function genPct(){
+  const p=pick([5,10,12.5,15,20,25,30,35,40,45,60,75,80,120,150]);
+  const p2=Math.round(p*2),k=200/gcd(p2,200);
+  const lo=Math.max(1,Math.ceil(20/k)),hi=Math.max(lo,Math.floor(900/k));
+  const n=k*R(lo,hi);return{q:`${fmt(p)}% of ${n}`,x:p2*n/200};
+}
+const MM_TYPES={
+  add:{label:'Addition',w:1,g:()=>{const a=R(12,999),b=R(12,999);return{q:`${a} + ${b}`,x:a+b};}},
+  sub:{label:'Subtraction',w:1,g:()=>{const a=R(100,999),b=R(12,999);return{q:`${a} ${MINUS} ${b}`,x:a-b};}},
+  mul:{label:'Multiplication',w:2,g:()=>{const t=R(0,2);let a,b;if(t===0){a=R(12,99);b=R(3,9);}else if(t===1){a=R(11,49);b=R(11,29);}else{a=R(101,999);b=R(2,9);}return{q:`${a} × ${b}`,x:a*b};}},
+  div:{label:'Division',w:1.5,g:()=>{const b=R(3,19),q=R(4,99);return{q:`${b*q} ÷ ${b}`,x:q};}},
+  dec:{label:'Decimals',w:2,g:genDec},
+  frac:{label:'Fractions',w:1.5,g:genFrac},
+  pct:{label:'Percentages',w:1,g:genPct},
+};
+const SPRINT_CATS=[['all','Everything',Object.keys(MM_TYPES)],['addsub','Add and subtract',['add','sub']],['mul','Multiply',['mul']],['div','Divide',['div']],['dec','Decimals',['dec']],['frac','Fractions',['frac']],['pct','Percentages',['pct']]];
+function numOpts(x){
+  const seen=new Set([fmt(x)]),out=[];
+  const add=v=>{if(!isFinite(v))return;if(x>=0&&v<0)return;const s=fmt(v);if(seen.has(s))return;seen.add(s);out.push(s);};
+  if(decPlaces(x)===0){
+    const ax=Math.abs(x);
+    const same=ax>=20?shuffle([10,-10,20,-20].concat(ax>=200?[100,-100]:[])):[];
+    const small=shuffle(ax<20?[1,-1,2,-2,3,-3]:[1,-1,2,-2,9,-9,11,-11]);
+    if(same.length){add(x+same[0]);add(x+same[1]);}
+    for(const o of small){if(out.length>=3)break;add(x+o);}
+  }else{
+    const st=Math.pow(10,-decPlaces(x));
+    if(Math.random()<0.5)add(Math.random()<0.5?x*10:x/10);
+    for(const o of shuffle([st,-st,2*st,-2*st,10*st,-10*st,9*st,-9*st])){if(out.length>=3)break;add(x+o);}
+  }
+  let k=3;while(out.length<3){add(x+k);k++;}
+  return out.slice(0,3);
+}
+function fracOpts(f,wrong){
+  const out=[],seen=new Set([f.n+'/'+f.d]);
+  const add=g=>{if(!g||g.d<=0||!Number.isInteger(g.n)||!Number.isInteger(g.d))return;const h=fr(g.n,g.d);if(f.n>0&&h.n<=0)return;const k=h.n+'/'+h.d;if(seen.has(k))return;seen.add(k);out.push(h);};
+  if(wrong&&Math.random()<0.8)add(wrong);
+  for(const g of shuffle([{n:f.n+1,d:f.d},{n:f.n-1,d:f.d},{n:f.n,d:f.d+1},{n:f.n,d:f.d-1},{n:f.n+2,d:f.d},{n:2*f.n+1,d:2*f.d},{n:2*f.n-1,d:2*f.d}])){if(out.length>=3)break;add(g);}
+  let k=3;while(out.length<3){add({n:f.n+k,d:f.d});k++;}
+  return out.slice(0,3);
+}
+function mmQ(types){
+  const tot=types.reduce((s,t)=>s+MM_TYPES[t].w,0);let r=Math.random()*tot,type=types[types.length-1];
+  for(const t of types){r-=MM_TYPES[t].w;if(r<0){type=t;break;}}
+  const g=MM_TYPES[type].g();let ans,opts;
+  if(g.f){ans=frStr(g.f);opts=fracOpts(g.f,g.wrong).map(frStr);}else{ans=fmt(g.x);opts=numOpts(g.x);}
+  return{type,q:g.q,ans,opts:shuffle([ans].concat(opts))};
+}
+
+/* ---------- number logic ---------- */
+const PRIMES=[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113];
+function gapList(t){return t.slice(1).map((v,i)=>fmt(v-t[i])).join(', ');}
+function offTxt(c){return c===0?'':(c>0?`, plus ${c}`:`, minus ${-c}`);}
+function stepTxt(d){return d>0?`add ${d}`:`subtract ${-d}`;}
+const SEQ_GENS=[
+  ()=>{const a=R(-20,60),d=pick([R(3,19),-R(3,15)]);return{t:range(6).map(i=>a+d*i),e:d>0?`Add ${d} each step.`:`Subtract ${-d} each step.`};},
+  ()=>{const r=pick([2,3,-2,-3,4]),a=R(1,7)*pick([1,1,-1]),n=Math.abs(r)>=3?5:6;return{t:range(n).map(i=>a*r**i),e:`Multiply by ${fmt(r)} each step.`};},
+  ()=>{const r=pick([2,3]),n=r===2?6:5,a=R(1,9)*r**(n-1);return{t:range(n).map(i=>a/r**i),e:`Divide by ${r} each step.`};},
+  ()=>{const a=R(-10,30),d0=R(-6,8),c=pick([2,3,4,5,6,-2,-3]);const t=[a];let d=d0;while(t.length<6){t.push(t[t.length-1]+d);d+=c;}return{t,e:`The gaps are ${gapList(t)}, so each gap changes by ${fmt(c)}.`};},
+  ()=>{if(Math.random()<0.65){const s=R(1,9),c=pick([0,0,R(1,9),-R(1,9)]);return{t:range(6).map(i=>(s+i)**2+c),e:`Squares of ${s}, ${s+1}, ${s+2} and so on${offTxt(c)}.`};}const s=R(1,4),c=pick([0,R(1,5),-R(1,5)]);return{t:range(5).map(i=>(s+i)**3+c),e:`Cubes of ${s}, ${s+1}, ${s+2} and so on${offTxt(c)}.`};},
+  ()=>{const a=R(1,9),b=R(1,12);const t=[a,b];while(t.length<7)t.push(t[t.length-1]+t[t.length-2]);return{t,e:'Each term is the sum of the two before it.',min:2};},
+  ()=>{const t=[R(0,3),R(1,4),R(1,5)];while(t.length<7)t.push(t[t.length-1]+t[t.length-2]+t[t.length-3]);return{t,e:'Each term is the sum of the three before it.',min:3};},
+  ()=>{const a=R(1,20),d=pick([R(2,9),-R(2,6)]),geo=Math.random()<0.5,b=geo?R(1,5):R(20,60),r=geo?pick([2,3]):pick([R(2,9),-R(2,9)]);const t=[];for(let i=0;i<4;i++)t.push(a+d*i,geo?b*r**i:b+r*i);return{t,e:`Two series take turns. Positions 1, 3, 5, 7: ${stepTxt(d)}. Positions 2, 4, 6, 8: ${geo?'multiply by '+r:stepTxt(r)}.`,min:2};},
+  ()=>{const a=R(1,9)*pick([1,-1]),b=pick([2,3]);const t=[R(1,9)];for(let i=0;t.length<7;i++){const p=t[t.length-1];t.push(i%2===0?p+a:p*b);}return{t,e:`Alternate: ${stepTxt(a)}, then multiply by ${b}.`,min:2};},
+  ()=>{const k=pick([2,3,-2]),c=pick([1,-1,2,-2,3,-3,4]);const t=[R(1,6)];while(t.length<6)t.push(t[t.length-1]*k+c);return{t,e:`Multiply by ${fmt(k)}, then ${c>0?'add':'subtract'} ${Math.abs(c)}.`,min:2};},
+  ()=>{const b=R(1,20),d0=R(1,5),r=pick([2,3]);const t=[b];let d=d0;while(t.length<6){t.push(t[t.length-1]+d);d*=r;}return{t,e:`The gaps are ${gapList(t)}, each ${r} times the one before.`};},
+  ()=>{const s=R(0,18);return{t:PRIMES.slice(s,s+6),e:'Consecutive prime numbers.'};},
+  ()=>{const s=R(1,4),m=R(2,3);const t=[s];for(let i=0;t.length<5;i++)t.push(t[t.length-1]*(m+i));return{t,e:`Multiply by ${m}, then ${m+1}, then ${m+2} and so on.`};},
+  ()=>{const t=pick([[1,2],[2,1],[1,3],[2,2],[3,1],[1,4]]).slice();while(t.length<6)t.push(t[t.length-1]*t[t.length-2]);return{t,e:'Each term is the product of the two before it.',min:2};},
+  ()=>{const a=R(1,5),p=R(1,3),b=a+R(1,4),q=R(1,4);return{t:range(5).map(i=>({n:a+p*i,d:b+q*i})),frac:true,e:`Numerators go up by ${p} and denominators by ${q}.`};},
+  ()=>{const a=R(1,6),d=R(2,5);return{t:range(6).map(i=>(i%2?-1:1)*(a+d*i)),e:`The sign flips each step while the size grows by ${d}.`};},
+];
+function genSeq(){return genSeqFrom(SEQ_GENS);}
+function termStr(s,k){const v=s.t[k];return s.frac?`${v.n}/${v.d}`:fmt(v);}
+
+/* ---------- beat the odds ---------- */
+function dice2(f){let c=0;for(let a=1;a<=6;a++)for(let b=1;b<=6;b++)if(f(a,b))c++;return c;}
+function Cnk(n,k){if(k<0||k>n)return 0;let r=1;for(let i=1;i<=k;i++)r=r*(n-k+i)/i;return Math.round(r);}
+const pc=v=>(v*100).toFixed(1)+'%';
+function evStr(x,unit){const s=(Math.round(x*100)/100).toFixed(2),neg=s[0]==='-'&&+s!==0,a=s.replace('-','');return(neg?MINUS:'')+(unit==='€'?'€':'')+a;}
+const CARDS=[
+  ['Two cards are drawn from a shuffled deck without replacement. What is the chance both are aces?',(4*3)/(52*51),'4/52 × 3/51 = 1/221.'],
+  ['Two cards are drawn from a shuffled deck without replacement. What is the chance they share a suit?',12/51,'The first card can be anything. 12 of the remaining 51 match its suit: 12/51 = 4/17.'],
+  ['Two cards are drawn from a shuffled deck without replacement. What is the chance both are hearts?',(13*12)/(52*51),'13/52 × 12/51 = 1/17.'],
+  ['One card is drawn from a shuffled deck. What is the chance it is a face card (J, Q, K) or a heart?',22/52,'12 face cards plus 13 hearts, minus the 3 counted twice, is 22. So 22/52 = 11/26.'],
+  ['Two cards are drawn from a shuffled deck without replacement. What is the chance at least one is an ace?',1-(48*47)/(52*51),`1 ${MINUS} (48/52 × 47/51) = 1 ${MINUS} 188/221 = 33/221.`],
+  ['Two cards are drawn from a shuffled deck without replacement. What is the chance they have the same rank?',3/51,'Whatever the first card is, 3 of the remaining 51 share its rank: 3/51 = 1/17.'],
+];
+const MISC=[
+  ['Two fair dice are rolled. What is the chance their product is even?',27/36,`The product is odd only if both dice are odd: 1 ${MINUS} (1/2)² = 3/4.`],
+  ['Two fair dice are rolled. What is the chance their sum is a prime number?',15/36,'Sums 2, 3, 5, 7 and 11 cover 1 + 2 + 4 + 6 + 2 = 15 outcomes: 15/36 = 5/12.'],
+  ['Two fair dice are rolled. What is the chance the numbers differ by exactly 1?',10/36,'Five adjacent pairs, each in two orders: 10/36 = 5/18.'],
+  ['Two fair dice are rolled. What is the chance the first shows a higher number than the second?',15/36,'6 of the 36 outcomes are ties. The other 30 split evenly: 15/36 = 5/12.'],
+  ['Four fair coins are flipped. What is the chance of more heads than tails?',5/16,'Four heads (1 way) or three heads (4 ways): 5/16.'],
+];
+const ODDS=[
+  ()=>{const s=R(3,11),c=dice2((a,b)=>a+b===s);return{q:`Two fair dice are rolled. What is the chance the sum is ${s}?`,v:c/36,ex:`${c} of the 36 equally likely outcomes sum to ${s}, so ${fracText(c,36)}.`};},
+  ()=>{const s=R(4,11),c=dice2((a,b)=>a+b>=s);return{q:`Two fair dice are rolled. What is the chance the sum is at least ${s}?`,v:c/36,ex:`${c} of the 36 outcomes have a sum of ${s} or more, so ${fracText(c,36)}.`};},
+  ()=>{const n=R(2,8),v=1-(5/6)**n;return{q:`You roll a fair die ${n} times. What is the chance of at least one six?`,v,ex:`1 ${MINUS} P(no six) = 1 ${MINUS} (5/6)^${n}.`};},
+  ()=>{const n=R(4,10),k=R(1,n-1),ex=Math.random()<0.5;let c=0;if(ex)c=Cnk(n,k);else for(let j=k;j<=n;j++)c+=Cnk(n,j);const d=2**n;return{q:`A fair coin is flipped ${n} times. What is the chance of ${ex?'exactly':'at least'} ${k} heads?`,v:c/d,ex:ex?`C(${n},${k}) / 2^${n} = ${c}/${d}.`:`Add C(${n},j) for j = ${k} to ${n}: ${c} of the ${d} outcomes.`};},
+  ()=>{const c=pick(CARDS);return{q:c[0],v:c[1],ex:c[2]};},
+  ()=>{const r=R(2,8),b=R(2,8),n=r+b,both=Math.random()<0.5,nu=both?r*(r-1):2*r*b,de=n*(n-1);return{q:`A bag holds ${r} red and ${b} blue balls. You draw two without replacement. What is the chance ${both?'both are red':'you get one of each colour'}?`,v:nu/de,ex:both?`${r}/${n} × ${r-1}/${n-1} = ${fracText(nu,de)}.`:`2 × ${r}/${n} × ${b}/${n-1} = ${fracText(nu,de)}.`};},
+  ()=>{const p=pick([1,2,4,5,10]),s=pick([80,90,95,99]),f=pick([2,5,10]),tp=p*s,fp=(100-p)*f,v=tp/(tp+fp);return{q:`${p}% of parts on a line are faulty. A scanner flags ${s}% of faulty parts and ${f}% of good ones. A part gets flagged. What is the chance it is faulty?`,v,ex:`Out of 10,000 parts, ${tp} faulty ones and ${fp} good ones get flagged. ${tp} / (${tp} + ${fp}).`};},
+  ()=>{const n=pick([10,15,20,23,25,30,40,50]);let q=1;for(let i=0;i<n;i++)q*=(365-i)/365;return{q:`${n} people are in a room. What is the chance at least two share a birthday? Assume 365 equally likely days.`,v:1-q,ex:`1 ${MINUS} (365/365 × 364/365 × … × ${366-n}/365).`};},
+  ()=>{const k=R(2,6),v=5**(k-1)/6**k;return{q:`You roll a fair die until the first six. What is the chance it comes on roll ${k}?`,v,ex:`(5/6)^${k-1} × 1/6 = ${5**(k-1)}/${6**k}.`};},
+  ()=>{if(Math.random()<0.35)return{q:'Three fair dice are rolled. What is the chance all three show different numbers?',v:120/216,ex:'6 × 5 × 4 = 120 of the 216 outcomes, so 5/9.'};const s=R(5,16);let c=0;for(let a=1;a<=6;a++)for(let b=1;b<=6;b++)for(let d=1;d<=6;d++)if(a+b+d===s)c++;return{q:`Three fair dice are rolled. What is the chance the sum is ${s}?`,v:c/216,ex:`${c} of the 216 outcomes sum to ${s}, so ${fracText(c,216)}.`};},
+  ()=>{if(Math.random()<0.5){const s=R(6,10),cd=dice2((a,b)=>a+b>=s),ev=dice2((a,b)=>a+b>=s&&a===b);return{q:`Two fair dice are rolled and the sum is at least ${s}. What is the chance they show a double?`,v:ev/cd,ex:`${cd} outcomes have a sum of at least ${s}, and ${ev} of them are doubles: ${fracText(ev,cd)}.`};}const k=R(1,6);return{q:`Two fair dice are rolled and at least one shows a ${k}. What is the chance both do?`,v:1/11,ex:`11 of the 36 outcomes contain a ${k}. Only one of those is a double ${k}: 1/11.`};},
+  ()=>{const m=pick(MISC);return{q:m[0],v:m[1],ex:m[2]};},
+  ()=>{const t=R(0,5);
+    if(t===0){const n=R(2,8),v=6*(1-(5/6)**n);return{unit:'n',q:`You roll ${n} fair dice. What is the expected number of different faces showing?`,v,ex:`Each face shows up with chance 1 ${MINUS} (5/6)^${n}. Multiply by 6 faces.`};}
+    if(t===1){const c=R(1,5),w=pick([6,12,18,24,30,36]),v=w/6-c;return{unit:'€',q:`A game costs €${c}. You roll two dice and win €${w} if the sum is 7. What is your expected profit per game?`,v,ex:`P(sum of 7) = 6/36 = 1/6. So €${w} / 6 ${MINUS} €${c}.`};}
+    if(t===2)return{unit:'€',q:'Roll a die and win its value in euros. You may reroll once but must keep the second roll. Playing well, what is the game worth?',v:4.25,ex:'A reroll is worth 3.5 on average, so keep a 4, 5 or 6. ½ × 5 + ½ × 3.5 = 4.25.'};
+    if(t===3)return{unit:'n',q:'Two fair dice are rolled. What is the expected value of the higher one?',v:161/36,ex:`P(max = k) = (2k ${MINUS} 1)/36. Adding k(2k ${MINUS} 1)/36 for k = 1 to 6 gives 161/36.`};
+    if(t===4)return{unit:'n',q:'On average, how many rolls of a fair die does it take to see all six faces?',v:14.7,ex:'6/6 + 6/5 + 6/4 + 6/3 + 6/2 + 6/1 = 14.7.'};
+    const p=pick([0.2,0.25,0.4,0.5]);return{unit:'n',q:`A coin lands heads with chance ${p}. On average, how many flips until the first head?`,v:1/p,ex:`A geometric wait has mean 1 / p = 1 / ${p}.`};},
+];
+function pctStr(p){const v=p*100;if(v<10||v>90)return String(+v.toFixed(1))+'%';return Math.round(v)+'%';}
+function probOpts(p){
+  const v=p*100,out=[],seen=new Set([pctStr(p)]);let gap,cands;
+  if(v<10){gap=Math.max(v*0.3,0.15);cands=[v*0.4,v*0.55,v*1.5,v*1.8,v*2.4,v*3.2];}
+  else if(v>90){gap=1.5;cands=[v-2.5,v-4,v-6,v-9,v-13,v+(100-v)*0.7];}
+  else{gap=3;cands=[v-4,v-7,v-11,v-16,v+4,v+7,v+11,v+16];}
+  shuffle(cands);
+  const tryAdd=w=>{if(w<0.1||w>99.9)return false;const s=pctStr(w/100);if(seen.has(s))return false;const wv=parseFloat(s);if(Math.abs(wv-v)<gap)return false;for(const o of out)if(Math.abs(parseFloat(o)-wv)<gap*0.6)return false;seen.add(s);out.push(s);return true;};
+  for(const w of cands){if(out.length>=3)break;tryAdd(w);}
+  let k=1;while(out.length<3&&k<60){if(v<10)tryAdd(v*(3+k*0.8));else if(!tryAdd(v-3*k-3))tryAdd(v+3*k+3);k++;}
+  return out.slice(0,3);
+}
+function evOpts(x,unit){
+  const gap=Math.max(0.3,Math.abs(x)*0.12),out=[],seen=new Set([evStr(x,unit)]);
+  const cands=shuffle([x-gap*1.2,x-gap*2,x-gap*3,x+gap*1.2,x+gap*2,x+gap*3]).concat([x+gap*4,x-gap*4,x+gap*5]);
+  for(const w of cands){if(out.length>=3)break;if(unit==='n'&&w<=0)continue;const s=evStr(w,unit);if(seen.has(s))continue;if(out.some(o=>Math.abs(o-w)<gap*0.8))continue;seen.add(s);out.push(w);}
+  return out.map(w=>evStr(w,unit));
+}
+function genOdds(){
+  const g=pick(ODDS)(),unit=g.unit||'%';let ans,opts;
+  if(unit==='%'){ans=pctStr(g.v);opts=probOpts(g.v);}else{ans=evStr(g.v,unit);opts=evOpts(g.v,unit);}
+  const val=s=>parseFloat(s.replace(MINUS,'-').replace('€','').replace('%',''));
+  return Object.assign(g,{unit,ans,opts:[ans].concat(opts).sort((a,b)=>val(a)-val(b))});
+}
+
+/* ---------- code compare ---------- */
+const CC_AL='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const CONF={'0':'OQD8','O':'0QDC','Q':'O0','D':'0O','1':'IL7','I':'1LT','L':'1I','5':'S6','S':'58','8':'B30','B':'8R3','3':'8BE','2':'Z7','Z':'2','7':'1T','T':'7I','6':'G8','G':'6CO','C':'GO','M':'NW','N':'MH','W':'MV','E':'FB3','F':'EP','P':'RF','R':'PB','U':'VO','V':'UY','Y':'VX','X':'KY','K':'X','H':'NM','9':'6'};
+function randCode(n){let s='';for(let i=0;i<n;i++)s+=pick(CC_AL);return s;}
+function mutate(c){const a=c.split('');if(Math.random()<0.3){const i=R(0,a.length-2);if(a[i]!==a[i+1]){const t=a[i];a[i]=a[i+1];a[i+1]=t;return a.join('');}}const i=R(0,a.length-1);const pool=(CONF[a[i]]||CC_AL).replace(a[i],'');a[i]=pick(pool);return a.join('');}
+
+/* ---------- make the target ---------- */
+function solveAll(nums){
+  const res=new Map();
+  (function rec(list){
+    if(list.length===1){const x=list[0];if(!res.has(x.v))res.set(x.v,x.e);return;}
+    for(let i=0;i<list.length;i++)for(let j=i+1;j<list.length;j++){
+      const a=list[i],b=list[j],rest=list.filter((_,k)=>k!==i&&k!==j);
+      const outs=[{v:a.v+b.v,e:`(${a.e} + ${b.e})`},{v:a.v*b.v,e:`(${a.e} × ${b.e})`},{v:a.v-b.v,e:`(${a.e} ${MINUS} ${b.e})`},{v:b.v-a.v,e:`(${b.e} ${MINUS} ${a.e})`}];
+      if(b.v!==0&&a.v%b.v===0)outs.push({v:a.v/b.v,e:`(${a.e} ÷ ${b.e})`});
+      if(a.v!==0&&b.v%a.v===0)outs.push({v:b.v/a.v,e:`(${b.e} ÷ ${a.e})`});
+      for(const o of outs)rec(rest.concat([o]));
+    }
+  })(nums);
+  return res;
+}
+function genMT(){
+  for(let k=0;k<200;k++){
+    const nums=[R(1,9),R(1,9),R(2,12),R(2,13)];
+    const res=solveAll(nums.map(v=>({v,e:String(v)})));
+    const c=[...res.keys()].filter(t=>t>=12&&t<=99&&nums.indexOf(t)<0);
+    if(c.length<3)continue;
+    const target=pick(c);let sol=res.get(target);
+    if(sol[0]==='('&&sol[sol.length-1]===')')sol=sol.slice(1,-1);
+    return{nums:shuffle(nums),target,sol};
+  }
+  return{nums:[3,4,6,8],target:24,sol:`(8 ${MINUS} 6) × (3 × 4)`};
+}
+
+/* ---------- ladder: shared helpers ---------- */
+const SUPD={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+const sup=n=>String(n).split('').map(c=>SUPD[c]||c).join('');
+const median=a=>{if(!a.length)return null;const s=a.slice().sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+function isPrime(n){if(n<2)return false;for(let p=2;p*p<=n;p++)if(n%p===0)return false;return true;}
+function pairKeys(p,lo,hi,sym){const o=[];for(let a=lo;a<=hi;a++)for(let b=sym?a:lo;b<=hi;b++)o.push(`${p}:${a},${b}`);return o;}
+const fs=(n,d)=>frStr(fr(n,d));
+const redTo=(n,d)=>{const f=fr(n,d);return(f.n!==n||f.d!==d)?` = ${frStr(f)}`:'';};
+const pc1=x=>(x*100).toFixed(1)+'%';
+const DEC_FRACS=['1/2','1/3','2/3','1/4','3/4','1/5','2/5','3/5','4/5','1/6','5/6','1/7','2/7','3/7','4/7','5/7','6/7','1/8','3/8','5/8','7/8','1/9','2/9','4/9','5/9','7/9','8/9','1/11','2/11','1/12','5/12','7/12','1/16','3/16','1/20','3/20','1/25'];
+const PCT_FRACS=['1/2','1/3','2/3','1/4','3/4','1/5','2/5','1/6','5/6','1/7','1/8','3/8','5/8','1/9','1/10','1/11','1/12','1/16','1/18','1/20','1/25','1/32','1/36','5/36','7/36','11/36','25/36'];
+const PRIME_POOL=[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,1,9,21,27,33,39,49,51,57,63,69,77,81,87,91,93,99,111,117,119];
+
+/* ---------- facts ---------- */
+function factQ(key){
+  const i=key.indexOf(':'),k=key.slice(0,i),nums=key.slice(i+1).split(/[,/]/).map(Number),a=nums[0],b=nums[1],sw=Math.random()<0.5;
+  switch(k){
+    case 'a':return{key,q:sw?`${a} + ${b}`:`${b} + ${a}`,x:a+b};
+    case 's':return{key,q:`${a+b} ${MINUS} ${a}`,x:b};
+    case 'm':return{key,q:sw?`${a} × ${b}`:`${b} × ${a}`,x:a*b};
+    case 'd':return{key,q:`${a*b} ÷ ${a}`,x:b};
+    case 'q':return{key,q:`${a}²`,x:a*a};
+    case 'c':return{key,q:`${a}³`,x:a**3};
+    case 'p':return{key,q:`2${sup(a)}`,x:2**a};
+    case 'f':return{key,q:`${a}/${b}`,x:a/b,tol:0.0006,dot:true,ans:fmt(Math.round(1000*a/b)/1000),hint:'As a decimal, rounded to 3 places'};
+    case 'pc':return{key,q:`${a}/${b}`,x:100*a/b,tol:0.06,dot:true,ans:fmt(Math.round(1000*a/b)/10),unit:'%',hint:'As a percent, rounded to 1 decimal'};
+    case 'rq':return{key,q:`${a*a} = ?²`,x:a,ex:`${a}² = ${a*a}`};
+    case 'rc':return{key,q:`${a**3} = ?³`,x:a,ex:`${a}³ = ${a**3}`};
+    case 'rp':return{key,q:`${2**a} = 2^?`,html:`${2**a} = 2<sup>?</sup>`,x:a,ex:`2${sup(a)} = ${2**a}`};
+    case 'pr':{
+      const p=isPrime(a);let ex;
+      if(a===1)ex='1 is not prime: a prime has exactly two factors.';
+      else if(!p){let f=2;while(a%f)f++;ex=`${a} = ${f} × ${a/f}, so it is not prime.`;}
+      else{const ps=[2,3,5,7].filter(x=>x*x<=a);ex=ps.length?`None of ${ps.join(', ')} divides ${a}, so it is prime.`:`${a} is prime.`;}
+      return{key,kind:'mc',q:String(a),sub:'Prime or not?',ans:p?'Prime':'Not prime',opts:['Prime','Not prime'],ex};
+    }
+  }
+  return null;
+}
+const KEY_LEVEL={a:'A1',s:'A2',m:'A3',d:'A4',q:'A8',c:'A9',p:'A9',f:'A10',rq:'S0',rc:'S0',rp:'S0',pr:'S0b',pc:'P0'};
+const levelOfKey=k=>KEY_LEVEL[k.slice(0,k.indexOf(':'))]||null;
+
+/* ---------- arithmetic generators ---------- */
+function genA5(){
+  if(Math.random()<0.5){let a,b;do{a=R(12,89);b=R(2,9);}while(a%10===0||a%10+b<10);return{q:`${a} + ${b}`,x:a+b};}
+  let a,b;do{a=R(21,99);b=R(2,9);}while(a%10>=b);return{q:`${a} ${MINUS} ${b}`,x:a-b};
+}
+function genA6(){
+  if(Math.random()<0.5){const a=R(11,99),b=R(11,99);return{q:`${a} + ${b}`,x:a+b};}
+  const a=R(31,99),b=R(11,a-6);return{q:`${a} ${MINUS} ${b}`,x:a-b};
+}
+function genA7(){let a;do{a=R(12,99);}while(a%10===0);const b=R(2,9);return Math.random()<0.5?{q:`${a} × ${b}`,x:a*b}:{q:`${b} × ${a}`,x:a*b};}
+function genA11(){
+  if(Math.random()<0.6){const d=R(3,9);let q;do{q=R(12,199);}while(d*q<100||d*q>999||q%10===0);return{q:`${d*q} ÷ ${d}`,x:q};}
+  const d=R(11,25),q=R(3,40);return{q:`${d*q} ÷ ${d}`,x:q};
+}
+
+/* ---------- sequence levels ---------- */
+function genSeqFrom(gens){
+  for(let k=0;k<100;k++){
+    const g=pick(gens)();
+    const vals=g.t.map(v=>g.frac?v.n/v.d:v);
+    if(vals.some(v=>!isFinite(v)||Math.abs(v)>5000))continue;
+    if(new Set(vals.map(v=>v.toFixed(6))).size<4)continue;
+    if(!g.frac&&vals.some(v=>!Number.isInteger(v)))continue;
+    if(vals.some((v,i)=>i&&v===0&&vals[i-1]===0))continue;
+    const n=g.t.length,min=g.min||1;let hide=n-1;
+    if(Math.random()<0.3&&n-2>=min)hide=R(min,n-2);
+    return Object.assign(g,{vals,hide,n});
+  }
+  return{t:[2,4,6,8,10,12],vals:[2,4,6,8,10,12],hide:5,n:6,e:'Add 2 each step.'};
+}
+const sqSeq=off=>()=>{
+  const c=off?pick([1,2,3,4,5,6,7,8,9,-1,-2,-3,-4,-5]):0;
+  if(Math.random()<0.65){const s=R(1,15);return{t:range(6).map(i=>(s+i)**2+c),e:`Squares of ${s}, ${s+1}, ${s+2} and so on${offTxt(c)}.`};}
+  const s=R(1,6);return{t:range(5).map(i=>(s+i)**3+c),e:`Cubes of ${s}, ${s+1}, ${s+2} and so on${offTxt(c)}.`};
+};
+const SEQ_SETS={S1:[SEQ_GENS[0]],S2:[SEQ_GENS[1],SEQ_GENS[2]],S3:[sqSeq(false)],S4:[sqSeq(true)],S5:[SEQ_GENS[3]],S6:[SEQ_GENS[5],SEQ_GENS[6]],S7:[SEQ_GENS[7],SEQ_GENS[15]],S8:[SEQ_GENS[8],SEQ_GENS[9],SEQ_GENS[10],SEQ_GENS[12],SEQ_GENS[13]]};
+function seqQ(s){return{tpl:'seq',seq:s,x:s.vals[s.hide],ans:termStr(s,s.hide),neg:true,slash:true,ex:s.e,q:s.t.map((v,k)=>k===s.hide?'?':termStr(s,k)).join(', ')};}
+
+/* ---------- probability levels ---------- */
+const DIE_EV=[['an even number',f=>f%2===0],['an odd number',f=>f%2===1],['a prime number',f=>f===2||f===3||f===5],['a multiple of 3',f=>f%3===0]];
+function dieEvent(){
+  const t=R(0,5);
+  if(t<4){const e=DIE_EV[t];return[e[0],[1,2,3,4,5,6].filter(e[1])];}
+  const k=R(2,5);
+  return t===4?[`a number above ${k}`,[1,2,3,4,5,6].filter(f=>f>k)]:[`a number below ${k}`,[1,2,3,4,5,6].filter(f=>f<k)];
+}
+const CARD_EV=[['a heart',13],['an ace',4],['a face card (J, Q or K)',12],['a red card',26],['a red king',2],['a number card from 2 to 10',36],['a king or a queen',8]];
+const CARD_PL=[['hearts',13],['aces',4],['red cards',26],['face cards',12]];
+const bagTxt=(r,b,g)=>g?`${r} red, ${b} blue and ${g} green balls`:`${r} red and ${b} blue balls`;
+const tq=o=>Object.assign({long:true,slash:true},o);
+
+function genP1(){
+  const t=R(0,2);
+  if(t===0){const [l,s]=dieEvent(),n=s.length;return tq({tpl:'p1die',ev:l,q:`A fair die is rolled. What is the chance of ${l}?`,x:n/6,ans:fs(n,6),ex:`${n} of the 6 faces work: ${n}/6${redTo(n,6)}.`});}
+  if(t===1){const [l,c]=pick(CARD_EV);return tq({tpl:'p1card',ev:l,q:`One card is drawn from a shuffled 52-card deck. What is the chance it is ${l}?`,x:c/52,ans:fs(c,52),ex:`${c} of the 52 cards work: ${c}/52${redTo(c,52)}.`});}
+  const r=R(1,6),b=R(1,6),g=R(0,4),n=r+b+g,col=pick(g?['red','blue','green']:['red','blue']),k={red:r,blue:b,green:g}[col];
+  return tq({tpl:'p1bag',bag:[r,b,g],col,q:`A bag holds ${bagTxt(r,b,g)}. One ball is drawn at random. What is the chance it is ${col}?`,x:k/n,ans:fs(k,n),ex:`${k} of the ${n} balls are ${col}: ${k}/${n}${redTo(k,n)}.`});
+}
+const DD=[
+  ()=>{const s=R(2,12);return[{t:'sum',s},`a sum of ${s}`,(a,b)=>a+b===s,`Sum ${s} has 6 ${MINUS} |${s} ${MINUS} 7| = ${6-Math.abs(s-7)} outcomes.`];},
+  ()=>{const s=R(2,12);return[{t:'sum',s},`a sum of ${s}`,(a,b)=>a+b===s,`Sum ${s} has 6 ${MINUS} |${s} ${MINUS} 7| = ${6-Math.abs(s-7)} outcomes.`];},
+  ()=>{const s=R(8,11),ts=[];for(let u=s;u<=12;u++)ts.push(6-Math.abs(u-7));return[{t:'ge',s},`a sum of at least ${s}`,(a,b)=>a+b>=s,`Sums ${s} to 12 have ${ts.join(' + ')} = ${ts.reduce((x,y)=>x+y,0)} outcomes.`];},
+  ()=>{const s=R(3,6),ts=[];for(let u=2;u<=s;u++)ts.push(6-Math.abs(u-7));return[{t:'le',s},`a sum of at most ${s}`,(a,b)=>a+b<=s,`Sums 2 to ${s} have ${ts.join(' + ')} = ${ts.reduce((x,y)=>x+y,0)} outcomes.`];},
+  ()=>[{t:'dbl'},'a double',(a,b)=>a===b,'One double per face, (1, 1) to (6, 6): 6.'],
+  ()=>{const k=R(1,6);return[{t:'one',k},`at least one ${k}`,(a,b)=>a===k||b===k,`6 with a ${k} on the first die, 6 with a ${k} on the second, minus (${k}, ${k}) counted twice: 6 + 6 ${MINUS} 1 = 11.`];},
+  ()=>{const d=R(1,5);return[{t:'diff',d},`a difference of exactly ${d}`,(a,b)=>Math.abs(a-b)===d,`${6-d} pairs differ by ${d}, each in two orders: 2 × ${6-d} = ${2*(6-d)}.`];},
+  ()=>[{t:'ee'},'two even numbers',(a,b)=>a%2===0&&b%2===0,'3 even faces on each die: 3 × 3 = 9.'],
+  ()=>[{t:'pe'},'an even product',(a,b)=>a*b%2===0,`The product is odd only when both dice are odd: 3 × 3 = 9. So 36 ${MINUS} 9 = 27.`],
+  ()=>[{t:'os'},'an odd sum',(a,b)=>(a+b)%2===1,'One die odd and the other even, in either order: 3 × 3 × 2 = 18.'],
+];
+function genP2(){const [spec,l,f,e]=pick(DD)();const c=dice2(f);return{tpl:'p2',spec,long:true,q:`Two fair dice are rolled. How many of the 36 outcomes give ${l}?`,x:c,ex:e};}
+function genP3(){
+  const t=R(0,4);
+  if(t===0){const k=R(1,6);return tq({tpl:'p3die',k,q:`A fair die is rolled. What is the chance it does not show a ${k}?`,x:5/6,ans:'5/6',ex:`P(a ${k}) = 1/6, so 1 ${MINUS} 1/6 = 5/6.`});}
+  if(t===1){const s=R(2,12),c=dice2((a,b)=>a+b===s);return tq({tpl:'p3sum',s,q:`Two fair dice are rolled. What is the chance the sum is not ${s}?`,x:(36-c)/36,ans:fs(36-c,36),ex:`${c} of the 36 outcomes sum to ${s}. 1 ${MINUS} ${c}/36 = ${36-c}/36${redTo(36-c,36)}.`});}
+  if(t===2){const [l,c]=pick(CARD_EV);return tq({tpl:'p3card',ev:l,q:`One card is drawn from a shuffled 52-card deck. What is the chance it is not ${l}?`,x:(52-c)/52,ans:fs(52-c,52),ex:`P(${l}) = ${c}/52, so 1 ${MINUS} ${c}/52 = ${52-c}/52${redTo(52-c,52)}.`});}
+  if(t===3)return tq({tpl:'p3dbl',q:'Two fair dice are rolled. What is the chance they do not show a double?',x:30/36,ans:'5/6',ex:`6 of the 36 outcomes are doubles. 1 ${MINUS} 6/36 = 30/36 = 5/6.`});
+  const r=R(1,7),b=R(1,7),n=r+b;
+  return tq({tpl:'p3bag',bag:[r,b,0],q:`A bag holds ${bagTxt(r,b,0)}. One ball is drawn at random. What is the chance it is not red?`,x:b/n,ans:fs(b,n),ex:`P(red) = ${r}/${n}, so 1 ${MINUS} ${r}/${n} = ${b}/${n}${redTo(b,n)}.`});
+}
+function genP4(){
+  const t=R(0,4);
+  if(t===0){const [l,s]=dieEvent(),n=s.length,side=pick(['heads','tails']);return tq({tpl:'p4coin',ev:l,q:`You flip a fair coin and roll a fair die. What is the chance of ${side} and ${l}?`,x:n/12,ans:fs(n,12),ex:`The coin and the die are independent: 1/2 × ${fs(n,6)} = ${fs(n,12)}.`});}
+  if(t===1){const n=R(2,5);return tq({tpl:'p4coins',n,q:`You flip ${n} fair coins. What is the chance all of them land heads?`,x:1/2**n,ans:`1/${2**n}`,ex:`${Array(n).fill('1/2').join(' × ')} = 1/${2**n}.`});}
+  if(t===2){const [l,s]=dieEvent(),n=s.length;return tq({tpl:'p4dice',ev:l,q:`Two fair dice are rolled. What is the chance both dice show ${l}?`,x:n*n/36,ans:fs(n*n,36),ex:`Each die on its own: ${fs(n,6)}. ${fs(n,6)} × ${fs(n,6)} = ${fs(n*n,36)}.`});}
+  if(t===3){const [l,c]=pick(CARD_PL);return tq({tpl:'p4cards',ev:l,q:`You draw a card from a shuffled deck, put it back, shuffle and draw again. What is the chance both cards are ${l}?`,x:c*c/2704,ans:fs(c*c,2704),ex:`The card goes back, so the draws are independent: ${fs(c,52)} × ${fs(c,52)} = ${fs(c*c,2704)}.`});}
+  const a=R(1,6),[l,s]=dieEvent(),n=s.length;
+  return tq({tpl:'p4two',a,ev:l,q:`You roll a fair die twice. What is the chance the first roll is a ${a} and the second is ${l}?`,x:n/36,ans:fs(n,36),ex:`1/6 × ${fs(n,6)} = ${fs(n,36)}.`});
+}
+function genP5(){
+  const t=R(0,3);
+  if(t===0){const k=R(4,6),q=k-1,lab=k===6?'six':`${k} or higher`;return tq({tpl:'p5die',k,q:`You roll a fair die twice. What is the chance of at least one ${lab}?`,x:1-q*q/36,ans:fs(36-q*q,36),ex:`P(none) = ${fs(q,6)} × ${fs(q,6)} = ${fs(q*q,36)}. 1 ${MINUS} ${fs(q*q,36)} = ${fs(36-q*q,36)}.`});}
+  if(t===1){const n=R(2,4),d=2**n;return tq({tpl:'p5coin',n,q:`You flip a fair coin ${n} times. What is the chance of at least one head?`,x:1-1/d,ans:`${d-1}/${d}`,ex:`P(no head) = ${Array(n).fill('1/2').join(' × ')} = 1/${d}. 1 ${MINUS} 1/${d} = ${d-1}/${d}.`});}
+  if(t===2){const [l,c]=pick([['heart',13],['ace',4],['face card',12]]),m=52-c,f=fr(m,52);return tq({tpl:'p5card',ev:l,q:`You draw a card, put it back, shuffle and draw again. What is the chance of at least one ${l}?`,x:1-(m/52)**2,ans:fs(f.d*f.d-f.n*f.n,f.d*f.d),ex:`P(no ${l}) = ${frStr(f)} × ${frStr(f)} = ${f.n*f.n}/${f.d*f.d}. 1 ${MINUS} ${f.n*f.n}/${f.d*f.d} = ${fs(f.d*f.d-f.n*f.n,f.d*f.d)}.`});}
+  const [pn,pd]=pick([[1,3],[1,4],[2,5],[1,5]]),qn=pd-pn;
+  return tq({tpl:'p5ev',p:[pn,pd],q:`An event has a ${pn}/${pd} chance on each try, independently. What is the chance it happens at least once in two tries?`,x:1-(qn/pd)**2,ans:fs(pd*pd-qn*qn,pd*pd),ex:`P(not on one try) = ${qn}/${pd}. P(never) = ${qn}/${pd} × ${qn}/${pd} = ${qn*qn}/${pd*pd}. 1 ${MINUS} ${qn*qn}/${pd*pd} = ${fs(pd*pd-qn*qn,pd*pd)}.`});
+}
+function pctSpread(v){
+  const c=Math.round(v*100),out=[c];
+  for(const w of shuffle([c-7,c-13,c-19,c+7,c+13,c+19,c-25,c+25,c-31,c+31])){if(out.length>=4)break;if(w<1||w>99)continue;if(out.some(o=>Math.abs(o-w)<6))continue;out.push(w);}
+  return out.sort((a,b)=>a-b).map(x=>x+'%');
+}
+function genP6(){
+  const t=R(0,4);let q,v,ex,n;
+  if(t===0){n=R(3,8);const no=(5/6)**n;v=1-no;q=`You roll a fair die ${n} times. What is the chance of at least one six?`;ex=`P(no six) = (5/6)${sup(n)} ≈ ${pc1(no)}. So P(at least one) ≈ ${pc1(v)}.`;}
+  else if(t===1){n=R(3,8);v=(5/6)**n;q=`You roll a fair die ${n} times. What is the chance of never rolling a six?`;ex=`(5/6)${sup(n)} ≈ ${pc1(v)}. Each roll keeps 5/6 of what is left.`;}
+  else if(t===2){n=R(3,7);v=1-0.5**n;q=`A fair coin is flipped ${n} times. What is the chance of at least one tails?`;ex=`P(no tails) = (1/2)${sup(n)} = 1/${2**n}. 1 ${MINUS} 1/${2**n} ≈ ${pc1(v)}.`;}
+  else if(t===3){n=R(2,5);v=1-0.75**n;q=`You draw a card, put it back and shuffle, ${n} times in a row. What is the chance of at least one heart?`;ex=`P(no heart) = (3/4)${sup(n)} ≈ ${pc1(0.75**n)}. So P(at least one) ≈ ${pc1(v)}.`;}
+  else{n=R(2,5);v=1-(2/3)**n;q=`Each try succeeds with chance 1/3, independently. What is the chance of at least one success in ${n} tries?`;ex=`P(no success) = (2/3)${sup(n)} ≈ ${pc1((2/3)**n)}. So P(at least one) ≈ ${pc1(v)}.`;}
+  return{tpl:'p6',t,n,kind:'mc',long:true,q,v,ans:Math.round(v*100)+'%',opts:pctSpread(v),ex};
+}
+const CARD_PAIRS=[
+  ['both are hearts',13*12,52*51,'13/52 × 12/51 = 1/4 × 4/17 = 1/17.','hh'],
+  ['both are red',26*25,52*51,'26/52 × 25/51 = 1/2 × 25/51 = 25/102.','rr'],
+  ['they share a suit',12,51,'The first card can be anything. 12 of the other 51 cards share its suit: 12/51 = 4/17.','ss'],
+  ['both are aces',4*3,52*51,'4/52 × 3/51 = 1/13 × 1/17 = 1/221.','aa'],
+];
+function genP7(){
+  const t=R(0,4);
+  if(t<4&&t!==3){const r=R(2,5),b=R(2,5),n=r+b,den=n*(n-1);
+    if(t===0)return tq({tpl:'p7',bag:[r,b],w:'rr',q:`A bag holds ${bagTxt(r,b,0)}. You draw two without putting the first back. What is the chance both are red?`,x:r*(r-1)/den,ans:fs(r*(r-1),den),ex:`${r}/${n} × ${r-1}/${n-1} = ${r*(r-1)}/${den}${redTo(r*(r-1),den)}.`});
+    if(t===1)return tq({tpl:'p7',bag:[r,b],w:'bb',q:`A bag holds ${bagTxt(r,b,0)}. You draw two without putting the first back. What is the chance both are blue?`,x:b*(b-1)/den,ans:fs(b*(b-1),den),ex:`${b}/${n} × ${b-1}/${n-1} = ${b*(b-1)}/${den}${redTo(b*(b-1),den)}.`});
+    return tq({tpl:'p7',bag:[r,b],w:'rb',q:`A bag holds ${bagTxt(r,b,0)}. You draw two without putting the first back. What is the chance you get one of each colour?`,x:2*r*b/den,ans:fs(2*r*b,den),ex:`Red then blue, or blue then red: 2 × ${r}/${n} × ${b}/${n-1} = ${2*r*b}/${den}${redTo(2*r*b,den)}.`});
+  }
+  const c=pick(CARD_PAIRS);
+  return tq({tpl:'p7card',w:c[4],q:`Two cards are drawn from a shuffled deck without replacement. What is the chance ${c[0]}?`,x:c[1]/c[2],ans:fs(c[1],c[2]),ex:c[3]});
+}
+function genP8(){
+  const t=R(0,3);let n,k;
+  if(t===0){n=R(3,12);k=2;}else if(t===1){n=R(4,10);k=3;}else if(t===2){n=R(5,10);k=n-2;}else{n=R(6,10);k=n-3;}
+  const c=Cnk(n,k),kk=Math.min(k,n-k);
+  if(kk===1)return{tpl:'p8',n,k,q:`${n} choose ${k}`,x:c,ex:`Picking ${k} of ${n} means leaving out 1, and there are ${n} ways to do that. Answer: ${c}`};
+  const ex=kk===2?`${n} × ${n-1} / 2 = ${c}`:`${n} × ${n-1} × ${n-2} / 6 = ${c}`;
+  return{tpl:'p8',n,k,q:`${n} choose ${k}`,x:c,ex:(k!==kk?`Same as ${n} choose ${kk}: `:'')+ex};
+}
+function genP9(){
+  const [a,b]=pick([[1,10],[2,10],[3,10],[4,10],[5,10],[6,10],[7,10],[8,10],[9,10],[1,4],[3,4],[1,2]]);
+  const W=R(2,20),L=R(1,20),v=(a*W-(b-a)*L)/b,p=a/b,q=(b-a)/b;
+  return{tpl:'p9',W,L,p,long:true,neg:true,dot:true,tol:0.006,x:v,ans:fmt(v),hint:'Use the minus key for a loss',
+    q:`A bet wins €${W} with chance ${fmt(p)} and loses €${L} otherwise. What is the expected profit in euros?`,
+    ex:`${fmt(p)} × ${W} ${MINUS} ${fmt(q)} × ${L} = ${fmt(p*W)} ${MINUS} ${fmt(q*L)} = ${fmt(v)}.`};
+}
+function genP10(){
+  const t=R(0,5),o={tpl:'p10',t,long:true,neg:true,dot:true,tol:0.006,hint:'Up to 2 decimals'};let v;
+  if(t===0){const c=R(1,5);v=3.5-c;Object.assign(o,{c,q:`You pay €${c} to roll a fair die and win the face value in euros. What is your expected profit?`,ex:`E[face] = 21/6 = 3.5. 3.5 ${MINUS} ${c} = ${fmt(v)}.`});}
+  else if(t===1){const W=6*R(1,6),c=R(1,5);v=W/6-c;Object.assign(o,{W,c,q:`You pay €${c} to roll a fair die. A six wins €${W} and anything else wins nothing. What is your expected profit?`,ex:`${W} × 1/6 = ${W/6}. ${W/6} ${MINUS} ${c} = ${fmt(v)}.`});}
+  else if(t===2){const k=R(2,5),fs2=[];for(let f=k;f<=6;f++)fs2.push(f);const S=fs2.reduce((x,y)=>x+y,0);v=S/6;Object.assign(o,{k,q:`You roll a fair die and win the face value in euros, but only if it shows ${k} or more. What is the game worth on average?`,ex:`(${fs2.join(' + ')}) / 6 = ${S}/6 ${Math.abs(v*100-Math.round(v*100))<1e-9?'=':'≈'} ${fmt(Math.round(v*100)/100)}.`});}
+  else if(t===3){const c=R(4,9);v=7-c;Object.assign(o,{c,q:`You pay €${c} to roll two fair dice and win their sum in euros. What is your expected profit?`,ex:`Expected values add: 3.5 + 3.5 = 7. 7 ${MINUS} ${c} = ${fmt(v)}.`});}
+  else if(t===4){const W=6*R(1,6),c=R(1,5);v=W/6-c;Object.assign(o,{W,c,q:`You pay €${c} to roll two fair dice. A sum of 7 wins €${W}. What is your expected profit?`,ex:`P(sum of 7) = 6/36 = 1/6. ${W}/6 ${MINUS} ${c} = ${W/6} ${MINUS} ${c} = ${fmt(v)}.`});}
+  else{const m=R(2,3);v=2*m;Object.assign(o,{m,q:`You roll a fair die. An even face pays ${m===2?'double':'triple'} its value in euros and an odd face pays nothing. What is the game worth on average?`,ex:`Even faces pay ${2*m}, ${4*m} and ${6*m}: (${2*m} + ${4*m} + ${6*m}) / 6 = ${12*m}/6 = ${2*m}.`});}
+  return Object.assign(o,{x:v,ans:fmt(Math.round(v*100)/100)});
+}
+
+/* ---------- levels ---------- */
+const LEVEL_N=10;
+const LEVELS=[
+  {id:'A1',grp:'A',name:'Addition facts',desc:'Single digits, like 8 + 5',mode:'fast',limit:1.5,keys:pairKeys('a',1,9,true),card:`<p>Recall the fact instead of working it out. If you notice yourself counting, that fact is not automatic yet.</p><ul><li><b>Make 10.</b> Split the smaller number so the larger one reaches 10: 8 + 5 = 8 + 2 + 3 = 13.</li><li><b>Near doubles.</b> 7 + 8 = 7 + 7 + 1 = 15.</li><li><b>Order does not matter.</b> 3 + 9 is the same fact as 9 + 3.</li></ul><p>Say the fact to yourself as one phrase, "eight five, thirteen", then type it.</p>`},
+  {id:'A2',grp:'A',name:'Subtraction facts',desc:'The same facts backwards, like 13 − 7',mode:'fast',limit:2,keys:pairKeys('s',1,9,false),card:`<p>Read subtraction as a missing addend: 13 − 7 asks "7 plus what makes 13?".</p><ul><li><b>Count up through 10.</b> From 7 to 10 is 3, and from 10 to 13 is 3 more, so 13 − 7 = 6.</li><li><b>Count down through 10.</b> 13 − 3 = 10, then 10 − 4 = 6.</li></ul><p>Every subtraction fact here is an addition fact from A1 read backwards.</p>`},
+  {id:'A3',grp:'A',name:'Times tables',desc:'2 to 13, like 7 × 8',mode:'fast',limit:2,keys:pairKeys('m',2,13,true),card:`<p>The goal is to know each product as a fact. While a fact is still slow, derive it from one you know, then drill it until you stop deriving.</p><ul><li><b>Squares as anchors.</b> 7 × 8 = 7 × 7 + 7 = 49 + 7 = 56.</li><li><b>× 9 is × 10 minus once.</b> 9 × 7 = 70 − 7 = 63.</li><li><b>× 11.</b> 11 × 7 = 77, 11 × 12 = 132, 11 × 13 = 143.</li><li><b>× 12 is × 10 plus × 2.</b> 12 × 7 = 70 + 14 = 84.</li><li><b>× 13 is × 10 plus × 3.</b> 13 × 7 = 70 + 21 = 91.</li></ul><p>The Progress tab shows which products are still slow. Select those cells and drill them on their own.</p>`},
+  {id:'A4',grp:'A',name:'Division facts',desc:'Times tables backwards, like 56 ÷ 7',mode:'fast',limit:2,keys:pairKeys('d',2,13,false),card:`<p>Division facts are times tables read backwards. 56 ÷ 7 asks "7 times what is 56?". The answer is 8, because 7 × 8 = 56.</p><ul><li>If 56 ÷ 7 is slow, the real problem is usually 7 × 8. Drill the × fact in the Progress tab.</li><li>One fact gives three: 13 × 7 = 91, so 91 ÷ 13 = 7 and 91 ÷ 7 = 13.</li></ul>`},
+  {id:'A5',grp:'A',name:'Bridging 10',desc:'Like 47 + 8 and 52 − 7',mode:'fast',limit:2.5,gen:genA5,card:`<p>Go through the next ten. This is the step between single-digit facts and two-digit sums.</p><ul><li><b>Add.</b> 47 + 8: first 47 + 3 = 50, then 50 + 5 = 55. The split 8 = 3 + 5 comes from the fact 7 + 3 = 10.</li><li><b>Subtract.</b> 52 − 7: first 52 − 2 = 50, then 50 − 5 = 45.</li></ul>`},
+  {id:'A6',grp:'A',name:'Two-digit add and subtract',desc:'Like 47 + 38 and 82 − 47',mode:'fast',limit:4,gen:genA6,card:`<ul><li><b>Add tens first, then ones.</b> 47 + 38: 47 + 30 = 77, then 77 + 8 = 85.</li><li><b>Round and fix.</b> 47 + 29 = 47 + 30 − 1 = 76.</li><li><b>Subtract by counting up.</b> 82 − 47: from 47 to 50 is 3, from 50 to 82 is 32, so the answer is 3 + 32 = 35.</li><li><b>Or subtract tens, then ones.</b> 82 − 47: 82 − 40 = 42, then 42 − 7 = 35.</li></ul>`},
+  {id:'A7',grp:'A',name:'Two-digit times one-digit',desc:'Like 47 × 6',mode:'fast',limit:5,gen:genA7,card:`<ul><li><b>Split the two-digit number.</b> 47 × 6 = 40 × 6 + 7 × 6 = 240 + 42 = 282.</li><li><b>Round up when the ones digit is 8 or 9.</b> 49 × 6 = 50 × 6 − 6 = 300 − 6 = 294.</li><li><b>× 4 is doubling twice.</b> 37 × 4: 37 → 74 → 148.</li><li><b>× 5 is × 10, then halve.</b> 46 × 5 = 460 ÷ 2 = 230.</li></ul>`},
+  {id:'A8',grp:'A',name:'Squares',desc:'2² to 25²',mode:'fast',limit:2,keys:range(24).map(i=>`q:${i+2}`),card:`<p>Squares up to 13² come from the times tables. Learn 14² to 25² as facts, and use these rules to check them.</p><ul><li><b>Ending in 5.</b> Multiply the tens digit by the next number, then write 25. 15²: 1 × 2 = 2, so 225. 25²: 2 × 3 = 6, so 625.</li><li><b>One more than a known square.</b> (a + 1)² = a² + 2a + 1. 21² = 400 + 40 + 1 = 441.</li><li><b>One less.</b> (a − 1)² = a² − 2a + 1. 19² = 400 − 40 + 1 = 361. 24² = 625 − 50 + 1 = 576.</li></ul><p>The rest to know: 14² = 196, 16² = 256, 17² = 289, 18² = 324, 22² = 484, 23² = 529.</p>`},
+  {id:'A9',grp:'A',name:'Cubes and powers of 2',desc:'2³ to 10³ and 2² to 2¹⁰',mode:'fast',limit:2,opt:true,keys:range(9).map(i=>`c:${i+2}`).concat(range(9).map(i=>`p:${i+2}`)),card:`<p>Optional. These show up in sequences, so it helps to know them both ways.</p><ul><li><b>Cubes.</b> 2³ = 8, 3³ = 27, 4³ = 64, 5³ = 125, 6³ = 216, 7³ = 343, 8³ = 512, 9³ = 729, 10³ = 1000. Build one with n³ = n² × n: 7³ = 49 × 7 = 343.</li><li><b>Powers of 2.</b> Double each step: 4, 8, 16, 32, 64, 128, 256, 512, 1024. 2¹⁰ = 1024, which is close to 1000.</li><li><b>Overlaps.</b> 64 = 8² = 4³ = 2⁶. 512 = 8³ = 2⁹.</li></ul>`},
+  {id:'A10',grp:'A',name:'Fractions as decimals',desc:'Like 3/8 = 0.375',mode:'fast',limit:3,keys:DEC_FRACS.map(f=>`f:${f}`),card:`<p>Answer to 3 decimal places, rounded, and press Enter. These anchors make percentages and probability estimates fast.</p><ul><li><b>Eighths.</b> 1/8 = 0.125, so k/8 = k × 0.125: 3/8 = 0.375, 5/8 = 0.625, 7/8 = 0.875.</li><li><b>Ninths repeat the top number.</b> 1/9 = 0.111, 4/9 = 0.444.</li><li><b>Sixths from thirds.</b> 1/3 = 0.333, and 1/6 is half of that: 0.167. 5/6 is 1 minus 1/6: 0.833.</li><li><b>Sevenths use the digits 142857.</b> 1/7 = 0.143, 2/7 = 0.286, 3/7 = 0.429.</li><li><b>Twelfths.</b> 1/12 = 0.083, 5/12 = 0.417.</li></ul>`},
+  {id:'A11',grp:'A',name:'Division in your head',desc:'Like 378 ÷ 6 and 391 ÷ 17',mode:'fast',limit:7,gen:genA11,card:`<p>Turn each division into multiplication you already know.</p><ol><li><b>Chunk.</b> 378 ÷ 6: 6 × 60 = 360, which leaves 378 − 360 = 18. Then 18 = 6 × 3, so the answer is 60 + 3 = 63.</li><li><b>Split the number.</b> 852 ÷ 4 = 800 ÷ 4 + 52 ÷ 4 = 200 + 13 = 213.</li><li><b>Halve repeatedly.</b> ÷ 4 is halving twice and ÷ 8 is halving three times. 456 ÷ 8: 456 → 228 → 114 → 57.</li><li><b>÷ 5 and ÷ 25.</b> Dividing by 5 is doubling, then dividing by 10: 345 ÷ 5 = 690 ÷ 10 = 69. Dividing by 25 is × 4, then ÷ 100: 675 ÷ 25 = 2700 ÷ 100 = 27.</li><li><b>Cancel common factors first.</b> 168 ÷ 12 = 84 ÷ 6 = 42 ÷ 3 = 14.</li><li><b>Two-digit divisors.</b> Chunk with tens. 391 ÷ 17: 17 × 20 = 340, and 391 − 340 = 51 = 17 × 3, so the answer is 23.</li></ol>`},
+
+  {id:'S0',grp:'S',name:'Spot the root',desc:'169 = 13², 343 = 7³, 512 = 2⁹',mode:'fast',limit:2.5,keys:range(22).map(i=>`rq:${i+4}`).concat(range(8).map(i=>`rc:${i+3}`),range(8).map(i=>`rp:${i+3}`)),card:`<p>Know squares to 25², cubes to 10³ and powers of 2 to 2¹⁰ in both directions, so 169 reads as 13² on sight. Type the missing root or power.</p><ul><li><b>Squares never end in 2, 3, 7 or 8.</b> 288 cannot be a square.</li><li><b>The last digit narrows the root.</b> A square ending in 6 has a root ending in 4 or 6: 196 = 14², 256 = 16².</li><li><b>Each cube from 1³ to 10³ has a different last digit.</b> 343 ends in 3, and only 7³ ends in 3.</li><li><b>Powers of 2</b> end in 2, 4, 8 or 6 and double each step: 512 = 2⁹.</li></ul>`},
+  {id:'S0b',grp:'S',name:'Prime or not',desc:'Numbers up to 120',mode:'fast',limit:2.5,keys:PRIME_POOL.map(n=>`pr:${n}`),card:`<p>To test a number below 121, check only 2, 3, 5 and 7. A composite number below 121 always has a factor of at most 10, because two factors above 10 multiply to more than 120.</p><ul><li><b>3:</b> the digit sum is divisible by 3. 51: 5 + 1 = 6, so 51 = 3 × 17.</li><li><b>7:</b> learn the multiples that look prime: 49, 77, 91 = 7 × 13 and 119 = 7 × 17.</li><li><b>Common traps:</b> 57 = 3 × 19, 87 = 3 × 29, 91 = 7 × 13.</li><li>1 is not prime. A prime has exactly two factors.</li></ul>`},
+  {id:'S1',grp:'S',name:'Constant gap',desc:'Like 4, 11, 18, 25',mode:'paced',limit:6,gen:()=>seqQ(genSeqFrom(SEQ_SETS.S1)),card:`<p>Check the gaps first: subtract each term from the next.</p><ul><li>4, 11, 18, 25: the gaps are 7, 7, 7, so the next term is 25 + 7 = 32.</li><li>The gap can be negative: 40, 33, 26, 19 falls by 7 each step, so the next is 12.</li></ul>`},
+  {id:'S2',grp:'S',name:'Constant ratio',desc:'Like 3, 6, 12, 24',mode:'paced',limit:6,gen:()=>seqQ(genSeqFrom(SEQ_SETS.S2)),card:`<p>If the gaps grow, check the ratios: divide each term by the one before.</p><ul><li>3, 6, 12, 24: each term is 2 times the last, so the next is 48.</li><li>96, 48, 24, 12: each term is half the last, so the next is 6.</li><li>A negative ratio flips the sign. 2, −6, 18, −54 multiplies by −3, so the next is 162.</li></ul>`},
+  {id:'S3',grp:'S',name:'Squares and cubes',desc:'Like 49, 64, 81, 100',mode:'paced',limit:8,gen:()=>seqQ(genSeqFrom(SEQ_SETS.S3)),card:`<p>If neither the gaps nor the ratios are constant and the terms grow fast, look for squares or cubes.</p><ul><li>49, 64, 81, 100 are 7², 8², 9², 10², so the next is 11² = 121.</li><li>The gaps of squares are the odd numbers. Here they are 15, 17, 19, and the next gap is 21.</li><li>8, 27, 64, 125 are 2³, 3³, 4³, 5³, so the next is 6³ = 216.</li></ul>`},
+  {id:'S4',grp:'S',name:'Squares with an offset',desc:'Like 50, 65, 82, 101',mode:'paced',limit:10,gen:()=>seqQ(genSeqFrom(SEQ_SETS.S4)),card:`<p>A constant offset hides a square or a cube. Compare each term with the nearest square or cube.</p><ul><li>50, 65, 82, 101 are 7² + 1, 8² + 1, 9² + 1, 10² + 1, so the next is 11² + 1 = 122.</li><li>The offset does not change the gaps: they are still 15, 17, 19. Odd gaps that grow by 2 mean squares.</li><li>7, 26, 63, 124 are 2³ − 1, 3³ − 1, 4³ − 1, 5³ − 1.</li></ul>`},
+  {id:'S5',grp:'S',name:'Growing gaps',desc:'Like 2, 5, 10, 17',mode:'paced',limit:10,gen:()=>seqQ(genSeqFrom(SEQ_SETS.S5)),card:`<p>Write the gaps under the terms. If the gaps change by a constant, continue the gaps.</p><ul><li>2, 5, 10, 17: the gaps 3, 5, 7 grow by 2, so the next gap is 9 and the next term is 17 + 9 = 26.</li><li>1, 2, 4, 7, 11: the gaps are 1, 2, 3, 4, so the next term is 11 + 5 = 16.</li></ul>`},
+  {id:'S6',grp:'S',name:'Sum of previous terms',desc:'Like 3, 4, 7, 11',mode:'paced',limit:10,gen:()=>seqQ(genSeqFrom(SEQ_SETS.S6)),card:`<p>If the terms grow steadily but faster than a constant gap, add the two terms before.</p><ul><li>3, 4, 7, 11: 3 + 4 = 7 and 4 + 7 = 11, so the next is 7 + 11 = 18.</li><li>If two terms do not fit, try three. 1, 1, 2, 4, 7, 13: 2 + 4 + 7 = 13, so the next is 4 + 7 + 13 = 24.</li></ul>`},
+  {id:'S7',grp:'S',name:'Two series in turn',desc:'Like 1, 20, 3, 17, 5, 14',mode:'paced',limit:12,gen:()=>seqQ(genSeqFrom(SEQ_SETS.S7)),card:`<p>If the terms zig-zag, read the odd and even positions as two separate sequences.</p><ul><li>1, 20, 3, 17, 5, 14: positions 1, 3, 5 hold 1, 3, 5 (add 2) and positions 2, 4, 6 hold 20, 17, 14 (subtract 3). Position 7 comes next, so the answer is 7.</li><li>If only the sign alternates, look at the sizes: 3, −5, 7, −9 grows by 2 in size, so the next is 11.</li></ul>`},
+  {id:'S8',grp:'S',name:'Two-step rules',desc:'Like 2, 5, 11, 23',mode:'paced',limit:15,gen:()=>seqQ(genSeqFrom(SEQ_SETS.S8)),card:`<p>When gaps, ratios and known numbers all fail, test a two-step rule.</p><ul><li><b>Multiply, then add.</b> 2, 5, 11, 23: each term is 2 × the last + 1, so the next is 2 × 23 + 1 = 47.</li><li><b>Alternating steps.</b> 3, 6, 12, 15, 30: add 3, multiply by 2, add 3, multiply by 2, so the next is 30 + 3 = 33.</li><li><b>Gaps that multiply.</b> 5, 6, 8, 12, 20 has gaps 1, 2, 4, 8. They double, so the next gap is 16 and the next term is 36.</li><li><b>Growing multipliers.</b> 1, 2, 6, 24: × 2, × 3, × 4, so the next is 24 × 5 = 120.</li></ul>`},
+
+  {id:'P0',grp:'P',name:'Fractions as percents',desc:'Like 5/36 ≈ 13.9%',mode:'fast',limit:3,keys:PCT_FRACS.map(f=>`pc:${f}`),card:`<p>Answer as a percent, rounded to 1 decimal, and press Enter. These anchors let you estimate most probability questions.</p><ul><li>1/2 = 50%, 1/4 = 25%, 1/5 = 20%, 1/8 = 12.5%, 1/10 = 10%.</li><li>1/3 ≈ 33.3%, 1/6 ≈ 16.7%, 1/9 ≈ 11.1%, 1/12 ≈ 8.3%.</li><li>1/36 ≈ 2.8%. Build other dice fractions from it: 5/36 ≈ 5 × 2.78% ≈ 13.9%, and 11/36 ≈ 30.6%.</li><li>1/7 ≈ 14.3% and 1/11 ≈ 9.1%.</li></ul>`},
+  {id:'P1',grp:'P',name:'One event',desc:'One die, card or ball, as a fraction',mode:'paced',limit:8,gen:genP1,card:`<p>When every outcome is equally likely, the chance is the number of outcomes that work divided by the number of all outcomes.</p><ul><li>Die, 5 or 6: 2 of the 6 faces work, so 2/6 = 1/3.</li><li>Deck, face card: 12 of the 52 cards work, so 12/52 = 3/13.</li></ul><p>Type the answer as a fraction with the / key. It does not need to be reduced.</p>`},
+  {id:'P2',grp:'P',name:'Count two dice',desc:'How many of the 36 outcomes',mode:'paced',limit:6,gen:genP2,card:`<p>Two dice have 6 × 6 = 36 equally likely ordered outcomes. Count the ones that work.</p><ul><li><b>Sums.</b> Sum s has 6 − |s − 7| outcomes: sum 7 has 6, sum 8 has 5, sum 10 has 3, sum 12 has 1.</li><li><b>Doubles:</b> 6. <b>At least one 4:</b> 6 + 6 − 1 = 11, because (4, 4) is counted twice.</li><li><b>A difference of d:</b> 6 − d pairs, each in two orders, so 2 × (6 − d) outcomes.</li></ul>`},
+  {id:'P3',grp:'P',name:'The opposite event',desc:'P(not A) = 1 − P(A)',mode:'paced',limit:8,gen:genP3,card:`<p>P(not A) = 1 − P(A). Use it when the opposite event is easier to count.</p><ul><li>No six on a die: 1 − 1/6 = 5/6.</li><li>Sum is not 7: 6 of the 36 outcomes sum to 7, so 1 − 6/36 = 30/36 = 5/6.</li></ul>`},
+  {id:'P4',grp:'P',name:'Independent events',desc:'P(A and B) = P(A) × P(B)',mode:'paced',limit:10,gen:genP4,card:`<p>Events are independent when one result does not change the chances of the other. Then P(A and B) = P(A) × P(B).</p><ul><li>Heads and a six: 1/2 × 1/6 = 1/12.</li><li>Both dice even: 1/2 × 1/2 = 1/4.</li><li>Three heads in a row: 1/2 × 1/2 × 1/2 = 1/8.</li></ul>`},
+  {id:'P5',grp:'P',name:'At least one, few tries',desc:'1 − P(none), exact',mode:'paced',limit:15,gen:genP5,card:`<p>"At least one" is the opposite of "none". Find P(none), then subtract it from 1.</p><ul><li>At least one six in 2 rolls: P(no six) = 5/6 × 5/6 = 25/36, so 1 − 25/36 = 11/36.</li><li>At least one head in 3 flips: P(no head) = 1/8, so 1 − 1/8 = 7/8.</li></ul>`},
+  {id:'P6',grp:'P',name:'At least one, many tries',desc:'Estimate and pick the closest',mode:'paced',limit:15,gen:genP6,card:`<p>With many tries, estimate instead of computing exactly. The options are at least 6 percentage points apart, so the anchors below are precise enough.</p><ul><li>(5/6)² ≈ 69%, (5/6)³ ≈ 58%, (5/6)⁴ ≈ 48%, (5/6)⁵ ≈ 40%, (5/6)⁶ ≈ 33%.</li><li>(3/4)² ≈ 56%, (3/4)³ ≈ 42%, (3/4)⁴ ≈ 32%.</li><li>(2/3)² ≈ 44%, (2/3)³ ≈ 30%, (2/3)⁴ ≈ 20%.</li><li>Each extra roll multiplies by 5/6, which removes about a sixth of what is left: 58% − 10% ≈ 48%.</li></ul>`},
+  {id:'P7',grp:'P',name:'Without replacement',desc:'Two draws from a small bag',mode:'paced',limit:20,gen:genP7,card:`<p>Without replacement, the pool shrinks by one after each draw. Multiply the chances step by step.</p><ul><li>Both red from 3 red and 2 blue: 3/5 × 2/4 = 6/20 = 3/10.</li><li>One of each colour: red then blue, or blue then red, so 2 × 3/5 × 2/4 = 12/20 = 3/5.</li><li>Cancel before you multiply: 13/52 × 12/51 = 1/4 × 4/17 = 1/17.</li></ul>`},
+  {id:'P8',grp:'P',name:'Combinations',desc:'n choose k, n up to 12',mode:'fast',limit:5,gen:genP8,card:`<p>"n choose k" counts the ways to pick k items from n when order does not matter.</p><ul><li>n choose 2 is n × (n − 1) / 2. For 6 choose 2: 6 × 5 / 2 = 15.</li><li>n choose 3 is n × (n − 1) × (n − 2) / 6. For 7 choose 3: 7 × 6 × 5 / 6 = 35.</li><li>Picking k is the same as leaving out n − k, so 10 choose 8 is the same as 10 choose 2, which is 45.</li></ul>`},
+  {id:'P9',grp:'P',name:'Expected value of a bet',desc:'Win or lose a fixed amount',mode:'paced',limit:15,gen:genP9,card:`<p>Expected value = P(win) × win − P(lose) × loss.</p><ul><li>Win €10 with chance 0.3, lose €4 otherwise: 0.3 × 10 − 0.7 × 4 = 3 − 2.8 = 0.2.</li><li>A negative answer means the bet loses money on average. Use the − key.</li></ul>`},
+  {id:'P10',grp:'P',name:'Expected value of dice games',desc:'Fair dice, pay to play',mode:'paced',limit:15,gen:genP10,card:`<p>A fair die has expected value (1 + 2 + 3 + 4 + 5 + 6) / 6 = 21/6 = 3.5. Round to 2 decimals when needed.</p><ul><li>Pay €3, win the face value: 3.5 − 3 = 0.5.</li><li>Win €12 on a six only: 12 × 1/6 = 2.</li><li>Expected values add: two dice, win the sum, is worth 3.5 + 3.5 = 7.</li><li>Win the face value only on 4 or more: (4 + 5 + 6) / 6 = 15/6 = 2.5.</li></ul>`},
+];
+const LV={};for(const L of LEVELS)LV[L.id]=L;
+const GRP_NAME={A:'Arithmetic',S:'Sequences',P:'Probability'};
+/*PURE-END*/
+
+/* ---------- storage ---------- */
+const KEY='oadrills.v1';
+const store={hist:{},facts:{},lv:{},miss:{},set:{neg:true,theme:'auto',seqTimer:true,sprintCat:'all',tab:'train',grid:'×'}};
+try{const raw=localStorage.getItem(KEY);if(raw){const p=JSON.parse(raw);if(p&&typeof p==='object'){if(p.hist&&typeof p.hist==='object')store.hist=p.hist;if(p.set&&typeof p.set==='object')Object.assign(store.set,p.set);for(const k of ['facts','lv','miss'])if(p[k]&&typeof p[k]==='object')store[k]=p[k];}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
+function record(id,s){const h=store.hist[id]=store.hist[id]||[];h.push({s,t:Date.now()});if(h.length>60)h.splice(0,h.length-60);save();}
+function best(id){const h=store.hist[id]||[];return h.length?Math.max(...h.map(e=>e.s)):null;}
+function stats(id){const h=store.hist[id]||[];if(!h.length)return null;return{best:Math.max(...h.map(e=>e.s)),last:h[h.length-1].s,n:h.length,list:h.map(e=>e.s)};}
+function applyTheme(){const t=store.set.theme;if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;else delete document.documentElement.dataset.theme;}
+
+/* ---------- helpers ---------- */
+const app=document.getElementById('app');
+let cleanups=[];
+function clearScreen(){const c=cleanups;cleanups=[];c.forEach(f=>{try{f();}catch(e){}});app.innerHTML='';app.scrollTop=0;}
+function later(fn,ms){const id=setTimeout(fn,ms);cleanups.push(()=>clearTimeout(id));return id;}
+function countdown(ms,onTick,onEnd){
+  const t0=performance.now();let raf=0,done=false;
+  const api={stop(){done=true;cancelAnimationFrame(raf);},elapsed(){return performance.now()-t0;}};
+  function f(now){if(done)return;const rem=Math.min(ms,Math.max(0,ms-(now-t0)));onTick(rem,rem/ms);if(rem<=0){done=true;if(onEnd)onEnd();return;}raf=requestAnimationFrame(f);}
+  onTick(ms,1);raf=requestAnimationFrame(f);cleanups.push(api.stop);return api;
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function buzz(){try{if(navigator.vibrate)navigator.vibrate(35);}catch(e){}}
+const mmss=ms=>{const s=Math.ceil(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+const avgS=l=>l.length?(l.reduce((s,x)=>s+x.ms,0)/l.length/1000).toFixed(1)+' s':'none';
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+function spark(list){
+  const L=list.slice(-12);if(L.length<2)return'';
+  const W=320,H=64,P=8;let mn=Math.min(...L),mx=Math.max(...L);if(mn===mx){mn-=1;mx+=1;}
+  const X=i=>P+i*(W-2*P)/(L.length-1),Y=v=>H-P-(v-mn)*(H-2*P)/(mx-mn);
+  const d=L.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Last ${L.length} scores, from ${num(L[0])} to ${num(L[L.length-1])}"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${X(L.length-1).toFixed(1)}" cy="${Y(L[L.length-1]).toFixed(1)}" r="5" style="fill:var(--red)"/></svg>`;
+}
+function setProblem(el,q){el.textContent=q;el.className='problem '+(q.length<=9?'s1':q.length<=13?'s2':'s3');}
+
+function shell(title){
+  clearScreen();
+  const root=document.createElement('div');root.className='drill';
+  root.innerHTML=`<header class="bar"><button class="quit" type="button">Quit</button><div class="bar-title">${esc(title)}</div><div class="bar-score" aria-live="polite">0</div></header><div class="clock"><div class="clock-track"><div class="clock-fill"></div></div><div class="clock-text"></div></div><main class="stage"></main><footer class="controls"></footer>`;
+  app.appendChild(root);
+  root.querySelector('.quit').addEventListener('click',()=>home());
+  const q=s=>root.querySelector(s);
+  return{root,score:q('.bar-score'),clock:q('.clock'),fill:q('.clock-fill'),ctext:q('.clock-text'),stage:q('.stage'),controls:q('.controls')};
+}
+function setClock(S,rem,f){S.fill.style.transform=`scaleX(${f})`;S.ctext.textContent=mmss(rem);}
+function setProgress(S,done,total,label){S.fill.style.transform=`scaleX(${Math.max(0,1-done/total)})`;S.ctext.textContent=label;}
+
+function keypad(parent,opt){
+  const o=Object.assign({neg:true,dot:true,slash:true,max:10,autoLen:0},opt);
+  let val='';const api={locked:false,lock(b){api.locked=b;}};
+  const off=k=>(k==='neg'&&!o.neg)||(k==='dot'&&!o.dot)||(k==='slash'&&!o.slash);
+  const names={del:'Delete',neg:'Minus sign',slash:'Fraction bar',dot:'Decimal point',ok:'Enter'};
+  const L=[['7'],['8'],['9'],['del','⌫'],['4'],['5'],['6'],['neg',MINUS],['1'],['2'],['3'],['slash','/'],['0'],['dot','.'],['ok','Enter']];
+  const kp=document.createElement('div');kp.className='keypad';
+  kp.innerHTML=L.map(([k,l])=>`<button type="button" class="key${k==='ok'?' key-ok':''}${k==='0'?' span2':''}${off(k)?' key-off':''}" data-k="${k}"${off(k)?' disabled tabindex="-1"':''} aria-label="${names[k]||k}">${l||k}</button>`).join('');
+  parent.appendChild(kp);
+  function press(k){
+    if(api.locked)return;
+    if(k==='del')val=val.slice(0,-1);
+    else if(k==='neg')val=val[0]===MINUS?val.slice(1):MINUS+val;
+    else if(k==='slash'){if(val.indexOf('/')<0&&/\d$/.test(val))val+='/';}
+    else if(k==='dot'){const seg=val.split('/').pop();if(seg.indexOf('.')<0)val+=(/\d$/.test(val)?'':'0')+'.';}
+    else if(k==='ok'){if(val&&o.onSubmit)o.onSubmit(val);return;}
+    else if(val.replace(MINUS,'').length<o.max)val+=k;
+    if(o.onChange)o.onChange(val);
+    if(o.autoLen&&val.length===o.autoLen&&o.onSubmit)o.onSubmit(val);
+  }
+  kp.addEventListener('pointerdown',e=>{const b=e.target.closest('.key');if(!b||b.disabled)return;e.preventDefault();b.classList.add('down');setTimeout(()=>b.classList.remove('down'),90);press(b.dataset.k);});
+  const onKey=e=>{if(api.locked||!kp.isConnected)return;const m={Backspace:'del',Enter:'ok','-':'neg','/':'slash','.':'dot',',':'dot'};const k=m[e.key]||(/^\d$/.test(e.key)?e.key:null);if(!k||off(k))return;e.preventDefault();press(k);};
+  document.addEventListener('keydown',onKey);cleanups.push(()=>document.removeEventListener('keydown',onKey));
+  return api;
+}
+function nextButton(parent,label,fn){const b=document.createElement('button');b.type='button';b.className='primary next-btn';b.textContent=label;b.addEventListener('click',fn);parent.appendChild(b);return b;}
+
+/* ---------- screens ---------- */
+function toggleHTML(key,label){const v=!!store.set[key];return `<button class="toggle" type="button" data-t="${key}" aria-pressed="${v}"><span>${label}</span><b>${v?'On':'Off'}</b></button>`;}
+function bindToggle(d,key){const b=d.querySelector(`[data-t="${key}"]`);if(!b)return;b.addEventListener('click',()=>{const v=!store.set[key];store.set[key]=v;save();b.setAttribute('aria-pressed',String(v));b.querySelector('b').textContent=v?'On':'Off';});}
+function intro({id,title,how,settings,bind,start}){
+  clearScreen();
+  const d=document.createElement('div');d.className='page';
+  d.innerHTML=`<button class="back" type="button">Back</button><h1 class="page-title">${title}</h1><div class="howto">${how}</div>${settings||''}<div class="hist"></div><button class="primary start" type="button">Start</button>`;
+  app.appendChild(d);
+  d.querySelector('.back').addEventListener('click',()=>home());
+  const hist=d.querySelector('.hist');
+  const renderHist=hid=>{const st=stats(hid);hist.innerHTML=st?`<p class="hist-line">Best ${num(st.best)}, last ${num(st.last)}, ${st.n} ${st.n===1?'run':'runs'}</p>${spark(st.list)}`:'';};
+  renderHist(id);
+  if(bind)bind(d,renderHist);
+  d.querySelector('.start').addEventListener('click',()=>start());
+}
+function results({id,prevBest,title,big,unit,lines,html,again,more}){
+  clearScreen();
+  const st=stats(id),nb=prevBest!==null&&prevBest!==undefined&&big>prevBest;
+  const d=document.createElement('div');d.className='page';
+  d.innerHTML=`<p class="res-title">${esc(title)} finished</p><div class="res-big">${num(big)}<span class="res-unit">${esc(unit)}</span></div>${nb?'<p class="pb">New best</p>':''}
+<dl class="res-lines">${lines.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+${st&&st.n>1?`<h2 class="h-sm">Your last ${Math.min(12,st.n)} runs</h2>${spark(st.list)}`:''}
+${html||''}
+<div class="res-actions"><button class="primary" type="button" data-a="again">Go again</button>${(more||[]).map((m,i)=>`<button class="ghost" type="button" data-m="${i}">${esc(m[0])}</button>`).join('')}<button class="ghost" type="button" data-a="home">Home</button></div>`;
+  app.appendChild(d);
+  d.querySelector('[data-a="again"]').addEventListener('click',()=>again());
+  d.querySelector('[data-a="home"]').addEventListener('click',()=>home());
+  d.querySelectorAll('[data-m]').forEach(b=>b.addEventListener('click',()=>more[+b.dataset.m][1]()));
+}
+
+/* ---------- 80 in 8 and sprint ---------- */
+function runMM(full,cat){
+  const catRow=SPRINT_CATS.find(c=>c[0]===cat)||SPRINT_CATS[0];
+  const types=full?Object.keys(MM_TYPES):catRow[2],id=full?'m80':'sprint-'+catRow[0];
+  const dur=full?480000:120000,total=full?80:Infinity,neg=!!store.set.neg;
+  const S=shell(full?'80 in 8':'Sprint: '+catRow[1].toLowerCase());
+  S.stage.innerHTML='<div class="qnum"></div><div class="problem"></div>';
+  const qnum=S.stage.querySelector('.qnum'),prob=S.stage.querySelector('.problem');
+  S.controls.innerHTML='<div class="mc"></div><button class="skip" type="button">Skip for 0 points</button>';
+  const mc=S.controls.querySelector('.mc');
+  let i=0,correct=0,wrong=0,skipped=0,cur=null,t0=0,busy=true,ended=false;const log=[];
+  const score=()=>neg?correct-wrong:correct;
+  function next(){
+    if(ended)return;if(i>=total)return finish();
+    cur=mmQ(types);i++;
+    qnum.textContent=full?`${i} of 80`:`Question ${i}`;
+    setProblem(prob,cur.q);
+    mc.innerHTML=cur.opts.map(o=>`<button class="opt" type="button" data-v="${esc(o)}">${esc(o)}</button>`).join('');
+    t0=performance.now();busy=false;
+  }
+  mc.addEventListener('pointerdown',e=>{
+    const b=e.target.closest('.opt');if(!b||busy||ended)return;e.preventDefault();busy=true;
+    const v=b.dataset.v,ok=v===cur.ans;if(ok)correct++;else wrong++;
+    log.push({type:cur.type,q:cur.q,ans:cur.ans,your:v,ok,ms:performance.now()-t0});
+    b.classList.add(ok?'is-right':'is-wrong');
+    if(!ok){for(const x of mc.children)if(x.dataset.v===cur.ans)x.classList.add('is-answer');buzz();}
+    S.score.textContent=num(score());later(next,ok?110:420);
+  });
+  S.controls.querySelector('.skip').addEventListener('click',()=>{if(busy||ended)return;skipped++;log.push({type:cur.type,q:cur.q,ans:cur.ans,your:null,ok:null,ms:performance.now()-t0});next();});
+  const timer=countdown(dur,(rem,f)=>{setClock(S,rem,f);S.clock.classList.toggle('low',rem<10000);},()=>finish());
+  function finish(){
+    if(ended)return;ended=true;timer.stop();
+    const used=Math.min(dur,timer.elapsed()),sc=score(),prev=best(id);record(id,sc);
+    const agg={};for(const l of log){if(l.ok===null)continue;const a=agg[l.type]=agg[l.type]||{n:0,ok:0,ms:0};a.n++;if(l.ok)a.ok++;a.ms+=l.ms;}
+    const rows=Object.keys(agg).map(t=>Object.assign({t},agg[t])).sort((a,b)=>a.ok/a.n-b.ok/b.n||b.ms/b.n-a.ms/a.n);
+    const seen=correct+wrong+skipped;
+    const table=rows.length>1?`<h2 class="h-sm">By question type, weakest first</h2><div class="tbl"><table class="brk"><thead><tr><th>Type</th><th>Right</th><th>Average time</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${MM_TYPES[r.t].label}</td><td>${r.ok} of ${r.n}</td><td>${(r.ms/r.n/1000).toFixed(1)} s</td></tr>`).join('')}</tbody></table></div>`:'';
+    const miss=log.filter(l=>l.ok===false);
+    const missHTML=miss.length?`<h2 class="h-sm">Missed</h2><ul class="misses">${miss.slice(0,40).map(m=>`<li><span>${esc(m.q)} = <b>${esc(m.ans)}</b></span><span class="you">you: ${esc(m.your)}</span></li>`).join('')}</ul>`:'';
+    const lines=[['Correct',correct],['Wrong',wrong],['Skipped',skipped],['Pace',seen?(used/1000/seen).toFixed(1)+' s per question':'none']];
+    if(full)lines.push(['Pace needed to finish','6.0 s per question']);
+    results({id,prevBest:prev,title:full?'80 in 8':'Sprint',big:sc,unit:neg?'points':'correct',lines,html:table+missHTML,again:()=>runMM(full,cat)});
+  }
+  next();
+}
+
+/* ---------- sequences ---------- */
+function seqHTML(s,reveal){return s.t.map((v,k)=>{const last=k===s.t.length-1?'':',';if(k===s.hide)return reveal?`<span class="ti"><span class="t reveal">${esc(termStr(s,k))}</span>${last}</span>`:`<span class="ti"><span class="t hole" aria-label="missing">?</span>${last}</span>`;return `<span class="ti"><span class="t">${esc(termStr(s,k))}</span>${last}</span>`;}).join('');}
+function runSeq(){
+  const N=15,per=60000,timed=!!store.set.seqTimer;const S=shell('Sequences');
+  let i=0,correct=0,cur=null,timer=null;const log=[];
+  if(!timed)S.clock.classList.add('hidden');
+  function next(){
+    if(i>=N)return finish();
+    cur=genSeq();i++;cur.done=false;
+    S.stage.innerHTML=`<div class="qnum">${i} of ${N}</div><div class="seq">${seqHTML(cur,false)}</div><div class="entry"><span class="ev"></span></div><p class="hint">Use / for fractions</p><div class="fb-slot"></div>`;
+    const ev=S.stage.querySelector('.ev'),hint=S.stage.querySelector('.hint');
+    S.controls.innerHTML='';
+    cur.kp=keypad(S.controls,{onChange:v=>{ev.textContent=v;},onSubmit:v=>{const x=parseAns(v);if(isNaN(x)){hint.textContent='That is not a complete number yet.';return;}submit(v,x);}});
+    cur.t0=performance.now();
+    if(timed)timer=countdown(per,(rem,f)=>{setClock(S,rem,f);S.clock.classList.toggle('low',rem<10000);},()=>submit(null,NaN));
+  }
+  function submit(raw,x){
+    if(cur.done)return;cur.done=true;if(timer)timer.stop();cur.kp.lock(true);
+    const ok=raw!==null&&near(x,cur.vals[cur.hide]);
+    if(ok){correct++;S.score.textContent=correct;}else buzz();
+    log.push({ok,ms:performance.now()-cur.t0});
+    S.stage.querySelector('.seq').innerHTML=seqHTML(cur,true);
+    const h=S.stage.querySelector('.hint');if(h)h.remove();
+    if(raw===null){const en=S.stage.querySelector('.entry');if(en)en.remove();}
+    S.stage.querySelector('.fb-slot').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><p class="verdict">${ok?'Correct':raw===null?'Time is up':'Not quite'}</p><p>${ok?'':`The answer is <b>${esc(termStr(cur,cur.hide))}</b>. `}${esc(cur.e)}</p></div>`;
+    S.controls.innerHTML='';nextButton(S.controls,i>=N?'See results':'Next sequence',next);
+  }
+  function finish(){
+    const prev=best('seq');record('seq',correct);const okL=log.filter(l=>l.ok);
+    results({id:'seq',prevBest:prev,title:'Sequences',big:correct,unit:`of ${N}`,lines:[['Correct',`${correct} of ${N}`],['Average time',avgS(log)],['Average time when right',avgS(okL)]],html:`<p class="note">Common patterns: two series taking turns, gaps that grow, multiply-then-add, and sums of the previous terms. Check the gaps first, then the ratios.</p>`,again:runSeq});
+  }
+  next();
+}
+
+/* ---------- beat the odds ---------- */
+function runOdds(){
+  const N=10,per=90000;const S=shell('Beat the odds');
+  let i=0,correct=0,cur=null,timer=null;const log=[];
+  S.stage.classList.add('top');
+  function next(){
+    if(i>=N)return finish();
+    cur=genOdds();i++;cur.done=false;
+    S.stage.innerHTML=`<div class="qnum">${i} of ${N}</div><p class="oq">${esc(cur.q)}</p><div class="fb-slot"></div>`;
+    S.stage.scrollTop=0;
+    S.controls.innerHTML=`<div class="ostack">${cur.opts.map(o=>`<button class="opt" type="button" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
+    S.controls.querySelector('.ostack').addEventListener('click',e=>{const b=e.target.closest('.opt');if(b)answer(b.dataset.v,b);});
+    cur.t0=performance.now();
+    timer=countdown(per,(rem,f)=>{setClock(S,rem,f);S.clock.classList.toggle('low',rem<15000);},()=>answer(null,null));
+  }
+  function answer(v,b){
+    if(cur.done)return;cur.done=true;timer.stop();
+    const ok=v===cur.ans;if(ok){correct++;S.score.textContent=correct;}else buzz();
+    log.push({ok,ms:performance.now()-cur.t0});
+    for(const x of S.controls.querySelectorAll('.opt'))if(x.dataset.v===cur.ans)x.classList.add(ok?'is-right':'is-answer');
+    if(b&&!ok)b.classList.add('is-wrong');
+    const exact=cur.unit==='%'?pc(cur.v):evStr(cur.v,cur.unit);
+    S.stage.querySelector('.fb-slot').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><p class="verdict">${ok?'Correct':v===null?'Time is up':'Not quite'}</p><p>${esc(cur.ex)}</p><p class="exact">Exact value: ${esc(exact)}</p></div>`;
+    nextButton(S.controls,i>=N?'See results':'Next question',next);
+  }
+  function finish(){
+    const prev=best('odds');record('odds',correct);
+    results({id:'odds',prevBest:prev,title:'Beat the odds',big:correct,unit:`of ${N}`,lines:[['Correct',`${correct} of ${N}`],['Average time',avgS(log)]],html:`<p class="note">When the options are far apart, estimate instead of computing exactly. Useful anchors: 1/6 ≈ 16.7%, (5/6)² ≈ 69%, 1/36 ≈ 2.8%.</p>`,again:runOdds});
+  }
+  next();
+}
+
+/* ---------- pincode ---------- */
+function runPin(){
+  const S=shell('Pincode');S.clock.classList.add('hidden');
+  let len=4,lives=3,top=0,rounds=0;
+  function round(){
+    rounds++;const code=Array.from({length:len},()=>R(0,9)).join('');
+    S.stage.innerHTML=`<p class="qnum">${len}-digit code, ${lives} ${lives===1?'life':'lives'} left</p><div class="pin-show"></div><div class="entry" style="visibility:hidden"><span class="ev"></span></div><p class="msg"></p>`;
+    const show=S.stage.querySelector('.pin-show'),entry=S.stage.querySelector('.entry'),ev=S.stage.querySelector('.ev'),msg=S.stage.querySelector('.msg');
+    S.controls.innerHTML='<p class="msg">Watch the digits.</p>';
+    let k=0;
+    function flash(){if(k>=len){show.textContent='';ask();return;}show.textContent=code[k];later(()=>{show.textContent='';k++;later(flash,220);},760);}
+    later(flash,700);
+    function ask(){
+      entry.style.visibility='visible';S.controls.innerHTML='';
+      const kp=keypad(S.controls,{neg:false,dot:false,slash:false,max:len,autoLen:len,onChange:v=>{ev.textContent=v;},onSubmit:v=>{if(v.length<len)return;kp.lock(true);check(v);}});
+    }
+    function check(v){
+      if(v===code){top=Math.max(top,len);S.score.textContent=top;msg.innerHTML='<b class="good">Correct.</b> The next code is one digit longer.';len++;later(round,900);}
+      else{lives--;buzz();msg.innerHTML=`<b class="bad">The code was ${code}.</b>`;later(lives<=0?finish:round,1600);}
+    }
+  }
+  function finish(){
+    const prev=best('pin');record('pin',top);
+    results({id:'pin',prevBest:prev,title:'Pincode',big:top,unit:'digits',lines:[['Longest code remembered',top?`${top} digits`:'none'],['Codes attempted',rounds]],html:`<p class="note">Try grouping the digits into chunks of two or three as they appear, and say them to yourself.</p>`,again:runPin});
+  }
+  later(round,300);
+}
+
+/* ---------- code compare ---------- */
+function runCC(){
+  const S=shell('Code compare'),dur=60000;
+  let win=4000,score=0,miss=0,tight=null,cur=null,itemT=null,busy=true,ended=false;
+  S.stage.innerHTML='<p class="qnum">Tap the exact match</p><div class="cc-target"></div><div class="cc-window"><i></i></div>';
+  const tgt=S.stage.querySelector('.cc-target'),bar=S.stage.querySelector('.cc-window i');
+  S.controls.innerHTML='<div class="cc-opts"></div>';const box=S.controls.querySelector('.cc-opts');
+  function next(){
+    if(ended)return;
+    const code=randCode(R(6,8)),dec=new Set();let g=0;while(dec.size<3&&g++<60){const m=mutate(code);if(m!==code)dec.add(m);}
+    cur={code,w:win};tgt.textContent=code;
+    box.innerHTML=shuffle([code,...dec]).map(o=>`<button class="opt" type="button" data-v="${o}">${o}</button>`).join('');
+    busy=false;itemT=countdown(win,(rem,f)=>{bar.style.transform=`scaleX(${f})`;},()=>resolve(null));
+  }
+  box.addEventListener('pointerdown',e=>{const b=e.target.closest('.opt');if(!b||busy||ended)return;e.preventDefault();resolve(b);});
+  function resolve(b){
+    if(busy||ended)return;busy=true;if(itemT)itemT.stop();
+    const ok=!!b&&b.dataset.v===cur.code;
+    if(ok){score++;tight=tight===null?cur.w:Math.min(tight,cur.w);win=Math.max(700,win*0.9);b.classList.add('is-right');}
+    else{miss++;win=Math.min(4000,win*1.15);if(b)b.classList.add('is-wrong');for(const x of box.children)if(x.dataset.v===cur.code)x.classList.add('is-answer');buzz();}
+    S.score.textContent=score;later(next,ok?180:600);
+  }
+  const main=countdown(dur,(rem,f)=>setClock(S,rem,f),()=>finish());
+  function finish(){
+    if(ended)return;ended=true;if(itemT)itemT.stop();main.stop();
+    const prev=best('cc');record('cc',score);
+    results({id:'cc',prevBest:prev,title:'Code compare',big:score,unit:'matched',lines:[['Correct',score],['Missed or too slow',miss],['Shortest window cleared',tight===null?'none':(tight/1000).toFixed(2)+' s']],html:`<p class="note">Scan in chunks of two or three characters and drop an option as soon as one chunk differs.</p>`,again:runCC});
+  }
+  next();
+}
+
+/* ---------- task switch ---------- */
+function runTS(){
+  const N=40,limit=2500,S=shell('Task switch');
+  let i=0,prev=null,cur=null,busy=true,ended=false,tmr=0;const log=[];
+  S.stage.innerHTML='<div class="ts"><div class="ts-half"><span class="ts-label">Arrow: tap the way it points</span><span class="ts-stim"></span></div><div class="ts-half"><span class="ts-label">Number: odd left, even right</span><span class="ts-stim"></span></div></div>';
+  const frame=S.stage.querySelector('.ts'),[topS,botS]=S.stage.querySelectorAll('.ts-stim');
+  S.controls.innerHTML='<div class="ts-btns"><button class="ts-btn" type="button" data-s="L"><b>←</b>Left or odd</button><button class="ts-btn" type="button" data-s="R"><b>→</b>Right or even</button></div>';
+  setProgress(S,0,N,`0 of ${N}`);
+  function next(){
+    if(ended)return;if(i>=N)return finish();
+    i++;setProgress(S,i-1,N,`${i} of ${N}`);
+    const rule=prev===null?pick(['arrow','num']):(Math.random()<0.4?(prev==='arrow'?'num':'arrow'):prev);
+    const arrow=pick(['L','R']),digit=R(1,9);
+    cur={rule,sw:prev===null?null:rule!==prev,correct:rule==='arrow'?arrow:(digit%2?'L':'R')};
+    (rule==='arrow'?topS:botS).textContent=(arrow==='L'?'← ':'→ ')+digit;
+    prev=rule;cur.t0=performance.now();busy=false;
+    tmr=later(()=>respond(null),limit);
+  }
+  function respond(side){
+    if(busy||ended)return;busy=true;clearTimeout(tmr);
+    const rt=performance.now()-cur.t0,ok=side===cur.correct;
+    log.push({ok,rt,sw:cur.sw});
+    if(ok)S.score.textContent=log.filter(l=>l.ok).length;else buzz();
+    topS.textContent='';botS.textContent='';
+    frame.classList.add(ok?'flash-ok':'flash-bad');
+    later(()=>{frame.classList.remove('flash-ok','flash-bad');next();},ok?260:650);
+  }
+  S.controls.querySelector('.ts-btns').addEventListener('pointerdown',e=>{const b=e.target.closest('.ts-btn');if(!b)return;e.preventDefault();respond(b.dataset.s);});
+  const onKey=e=>{if(e.key==='ArrowLeft')respond('L');else if(e.key==='ArrowRight')respond('R');};
+  document.addEventListener('keydown',onKey);cleanups.push(()=>document.removeEventListener('keydown',onKey));
+  function finish(){
+    if(ended)return;ended=true;
+    const correct=log.filter(l=>l.ok).length,okRT=log.filter(l=>l.ok).map(l=>l.rt).sort((a,b)=>a-b);
+    const med=okRT.length?(okRT.length%2?okRT[okRT.length>>1]:(okRT[okRT.length/2-1]+okRT[okRT.length/2])/2):null;
+    const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
+    const sw=log.filter(l=>l.ok&&l.sw===true).map(l=>l.rt),rp=log.filter(l=>l.ok&&l.sw===false).map(l=>l.rt);
+    const cost=sw.length&&rp.length?Math.round(mean(sw)-mean(rp)):null;
+    const prevB=best('ts');record('ts',correct);
+    results({id:'ts',prevBest:prevB,title:'Task switch',big:correct,unit:`of ${N}`,lines:[['Accuracy',Math.round(100*correct/N)+'%'],['Median reaction time',med===null?'none':Math.round(med)+' ms'],['Switch cost',cost===null?'not enough data':cost>=0?`${cost} ms slower after a change`:`${-cost} ms faster after a change`]],html:`<p class="note">Read the position first, then the symbol. A small switch cost with high accuracy is the goal.</p>`,again:runTS});
+  }
+  later(next,900);
+}
+
+/* ---------- balloon ---------- */
+function runBal(){
+  const S=shell('Balloon'),V=5,M={blue:R(8,14),orange:R(20,36)};
+  const order=shuffle(Array(8).fill('blue').concat(Array(8).fill('orange'))),N=order.length;
+  let i=-1,pumps=0,popAt=0,total=0,busy=true,color='blue';const log=[];
+  S.stage.innerHTML='<p class="qnum b-lab"></p><svg class="bal-svg" viewBox="0 0 300 330" aria-hidden="true"><line class="bal-string" x1="150" x2="150" y1="200" y2="328"/><g class="bal-g"><circle class="bal" cx="150" cy="145" r="34"/><path class="bal-knot"/></g><text class="bal-pop" x="150" y="160" text-anchor="middle">Pop</text></svg><div class="bal-stats"><div><span>This balloon</span><b class="b-cur">0</b></div><div><span>Banked</span><b class="b-tot">0</b></div></div>';
+  const q=s=>S.stage.querySelector(s);
+  const g=q('.bal-g'),circ=q('.bal'),knot=q('.bal-knot'),str=q('.bal-string'),popT=q('.bal-pop'),cEl=q('.b-cur'),tEl=q('.b-tot'),lab=q('.b-lab');
+  S.controls.innerHTML='<div class="bal-btns"><button class="primary" type="button" data-a="pump">Pump</button><button class="ghost" type="button" data-a="col">Collect</button></div>';
+  const colB=S.controls.querySelector('[data-a="col"]');
+  function draw(){
+    const r=Math.min(126,34+pumps*2.5),by=145+r,fill=`var(--bal-${color==='blue'?'a':'b'})`;
+    circ.setAttribute('r',r.toFixed(1));knot.setAttribute('d',`M143 ${by+9} L150 ${by-2} L157 ${by+9} Z`);str.setAttribute('y1',by+9);
+    circ.style.fill=fill;knot.style.fill=fill;cEl.textContent=pumps*V;colB.textContent=`Collect ${pumps*V}`;
+  }
+  function nextBal(){
+    i++;if(i>=N)return finish();
+    color=order[i];pumps=0;popAt=R(2,M[color]);
+    g.classList.remove('popping');popT.classList.remove('on');
+    lab.textContent=`${cap(color)} balloon`;draw();setProgress(S,i,N,`${i+1} of ${N}`);busy=false;
+  }
+  S.controls.querySelector('[data-a="pump"]').addEventListener('pointerdown',e=>{
+    e.preventDefault();if(busy)return;pumps++;
+    if(pumps>=popAt){busy=true;log.push({c:color,p:pumps,popped:true});draw();cEl.textContent='0';colB.textContent='Collect 0';g.classList.add('popping');popT.classList.add('on');buzz();later(nextBal,950);}
+    else draw();
+  });
+  colB.addEventListener('click',()=>{if(busy)return;busy=true;total+=pumps*V;tEl.textContent=total;S.score.textContent=total;log.push({c:color,p:pumps,popped:false});later(nextBal,350);});
+  function finish(){
+    const prev=best('bal');record('bal',total);
+    let opt=0;for(const c of order){const k=Math.floor(M[c]/2);opt+=V*k*(M[c]-k)/(M[c]-1);}
+    const rows=['blue','orange'].map(c=>{const L=log.filter(l=>l.c===c),col=L.filter(l=>!l.popped),pops=L.length-col.length;return `<tr><td>${cap(c)}</td><td>${col.length?(col.reduce((s,l)=>s+l.p,0)/col.length).toFixed(1):'none'}</td><td>${pops} of ${L.length}</td><td>${Math.floor(M[c]/2)}</td></tr>`;}).join('');
+    results({id:'bal',prevBest:prev,title:'Balloon',big:total,unit:'points',lines:[['Balloons collected',log.filter(l=>!l.popped).length],['Balloons popped',log.filter(l=>l.popped).length],['Best fixed plan, on average',Math.round(opt)+' points']],
+      html:`<h2 class="h-sm">By colour</h2><div class="tbl"><table class="brk"><thead><tr><th>Colour</th><th>Avg pumps</th><th>Popped</th><th>Best stop</th></tr></thead><tbody>${rows}</tbody></table></div><p class="note">This round, blue balloons popped somewhere between pump 2 and ${M.blue}, orange between pump 2 and ${M.orange}. When the pop point is equally likely anywhere in the range, stopping halfway maximises the expected points. The ranges change every round.</p>`,again:runBal});
+  }
+  nextBal();
+}
+
+/* ---------- make the target ---------- */
+function runMT(){
+  const S=shell('Make the target'),dur=150000;
+  let solved=0,skipped=0,ended=false,puz=null,tiles=[],sel=null,op=null,hist=[],busy=true;
+  S.stage.innerHTML='<p class="mt-target">Target<b></b></p><div class="mt-tiles"></div><p class="msg"></p>';
+  const tEl=S.stage.querySelector('.mt-target b'),tilesEl=S.stage.querySelector('.mt-tiles'),msg=S.stage.querySelector('.msg');
+  S.controls.innerHTML=`<div class="mt-ops">${['+',MINUS,'×','÷'].map(o=>`<button class="mt-op" type="button" data-op="${o}" aria-label="${{'+':'plus','×':'times','÷':'divide'}[o]||'minus'}">${o}</button>`).join('')}</div><div class="mt-tools"><button class="ghost" type="button" data-a="undo">Undo</button><button class="ghost" type="button" data-a="reset">Reset</button><button class="ghost" type="button" data-a="skip">Skip</button></div>`;
+  function newPuzzle(){if(ended)return;puz=genMT();tiles=puz.nums.map(v=>({v,alive:true}));sel=null;op=null;hist=[];tEl.textContent=puz.target;msg.textContent='';render();busy=false;}
+  function render(){
+    tilesEl.innerHTML=tiles.map((t,k)=>`<button class="tile${t.alive?'':' gone'}${sel===k?' sel':''}" type="button" data-k="${k}"${t.alive?'':' tabindex="-1" aria-hidden="true"'}>${fmt(t.v)}</button>`).join('');
+    for(const b of S.controls.querySelectorAll('.mt-op'))b.classList.toggle('sel',b.dataset.op===op);
+  }
+  tilesEl.addEventListener('click',e=>{
+    const b=e.target.closest('.tile');if(!b||busy||ended)return;const k=+b.dataset.k;if(!tiles[k].alive)return;
+    if(sel===null||op===null){sel=sel===k?null:k;op=null;msg.textContent='';render();return;}
+    if(sel===k){sel=null;op=null;render();return;}
+    const a=tiles[sel].v,c=tiles[k].v;let r;
+    if(op==='+')r=a+c;else if(op===MINUS)r=a-c;else if(op==='×')r=a*c;
+    else{if(c===0||a%c!==0){msg.textContent=`${fmt(a)} ÷ ${fmt(c)} is not a whole number.`;return;}r=a/c;}
+    hist.push(tiles.map(t=>Object.assign({},t)));
+    tiles[k]={v:r,alive:true};tiles[sel].alive=false;sel=k;op=null;msg.textContent='';
+    const alive=tiles.filter(t=>t.alive);
+    if(alive.length===1){
+      if(alive[0].v===puz.target){solved++;S.score.textContent=solved;msg.innerHTML='<b class="good">Solved.</b>';busy=true;render();later(newPuzzle,650);return;}
+      msg.textContent=`That makes ${fmt(alive[0].v)}, not ${puz.target}. Undo or reset.`;
+    }
+    render();
+  });
+  S.controls.addEventListener('click',e=>{
+    if(busy||ended)return;
+    const o=e.target.closest('.mt-op');
+    if(o){if(sel===null){msg.textContent='Pick a number first.';return;}op=op===o.dataset.op?null:o.dataset.op;render();return;}
+    const a=e.target.closest('[data-a]');if(!a)return;
+    if(a.dataset.a==='undo'){if(hist.length){tiles=hist.pop();sel=null;op=null;msg.textContent='';render();}}
+    else if(a.dataset.a==='reset'){if(hist.length){tiles=hist[0];hist=[];}sel=null;op=null;msg.textContent='';render();}
+    else{skipped++;busy=true;msg.innerHTML=`One way: <b>${esc(puz.sol)}</b>`;later(newPuzzle,2400);}
+  });
+  const timer=countdown(dur,(rem,f)=>{setClock(S,rem,f);S.clock.classList.toggle('low',rem<10000);},()=>finish());
+  function finish(){
+    if(ended)return;ended=true;timer.stop();
+    const prev=best('mt');record('mt',solved);
+    results({id:'mt',prevBest:prev,title:'Make the target',big:solved,unit:'solved',lines:[['Solved',solved],['Skipped',skipped]],html:`<p class="note">Work backwards from the target: look for a factor pair or a near miss you can fix with the last number.</p>`,again:runMT});
+  }
+  newPuzzle();
+}
+
+
+/* ---------- ladder progress ---------- */
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function lvState(id){return store.lv[id]||(store.lv[id]={days:[],runs:0});}
+function mastered(id){const s=store.lv[id];return !!s&&s.days.length>=2;}
+function suggested(g){for(const L of LEVELS)if(L.grp===g&&!L.opt&&!mastered(L.id))return L.id;return null;}
+function factRec(key,ok,ms){const f=store.facts[key]=store.facts[key]||{t:[],s:0,w:0,n:0};f.n++;if(ok){f.t.push(Math.round(ms));if(f.t.length>5)f.t.shift();f.s++;f.w=0;}else{f.s=0;f.w=1;}}
+function factMed(f){return f&&f.t.length?median(f.t.slice(-3)):null;}
+function factColor(key){const f=store.facts[key];if(!f||!f.n)return'g0';if(f.w)return'red';const m=factMed(f);if(m===null)return'red';if(m<1500&&f.s>=3)return'green';if(m<3000)return'yellow';return'red';}
+const FW={g0:4,red:5,yellow:3,green:1};
+function pickKey(keys,recent){
+  let tot=0;const w=keys.map(k=>{const v=(keys.length>3&&recent.indexOf(k)>=0)?0:FW[factColor(k)];tot+=v;return v;});
+  let r=Math.random()*tot;for(let i=0;i<keys.length;i++){r-=w[i];if(r<0)return keys[i];}return keys[keys.length-1];
+}
+function slowScore(k){const f=store.facts[k];if(!f)return 0;if(f.w)return 1e9+f.n;return factMed(f)||0;}
+function prepQ(q,L){
+  if(!q)return q;
+  if(L&&!q.lv)q.lv=L.id;
+  if(!q.kind)q.kind='type';
+  if(q.ans===undefined)q.ans=fmt(q.x);
+  if(L&&L.mode==='paced')q.paced=true;
+  return q;
+}
+function factSource(keys){const recent=[];return()=>{const k=pickKey(keys,recent);recent.push(k);if(recent.length>2)recent.shift();return prepQ(factQ(k),LV[levelOfKey(k)]);};}
+function levelSource(L){return L.keys?factSource(L.keys):()=>prepQ(L.gen(),L);}
+const KEEP=['lv','key','kind','q','html','sub','long','seq','x','ans','tol','neg','dot','slash','opts','ex','paced','hint','unit'];
+function strip(q){const o={};for(const k of KEEP)if(q[k]!==undefined)o[k]=q[k];return o;}
+function missAdd(q){if(!q.lv)return;const a=store.miss[q.lv]=store.miss[q.lv]||[];if(a.some(x=>x.q===q.q&&x.ans===q.ans))return;const c=strip(q);c.ts=Date.now();a.unshift(c);if(a.length>20)a.length=20;}
+function missDrop(q){const a=store.miss[q.lv];if(!a)return;const i=a.findIndex(x=>x.q===q.q&&x.ans===q.ans);if(i>=0)a.splice(i,1);if(!a.length)delete store.miss[q.lv];}
+const secs=ms=>ms===null||ms===undefined?'none':(ms/1000).toFixed(1)+' s';
+
+function pausable(ms,onTick,onEnd){
+  let left=ms,t0=performance.now(),raf=0,run=true,done=false;
+  function f(now){if(done||!run)return;const rem=Math.max(0,left-(now-t0));onTick(rem,rem/ms);if(rem<=0){done=true;if(onEnd)onEnd();return;}raf=requestAnimationFrame(f);}
+  const api={
+    pause(){if(!run||done)return;left=Math.max(0,left-(performance.now()-t0));run=false;cancelAnimationFrame(raf);},
+    resume(){if(run||done)return;run=true;t0=performance.now();raf=requestAnimationFrame(f);},
+    stop(){done=true;cancelAnimationFrame(raf);}
+  };
+  onTick(ms,1);raf=requestAnimationFrame(f);cleanups.push(api.stop);return api;
+}
+
+/* ---------- one runner for levels, warm-up and custom drills ---------- */
+function runSession(cfg){
+  const L=cfg.level||null,S=shell(cfg.title),N=cfg.N||0;
+  let fresh=0,asked=0,cur=null,ended=false,busy=true,clock=null,correct=0;
+  const log=[],reask=[],pre=(cfg.pre||[]).slice();
+  if(cfg.dur)clock=pausable(cfg.dur,(rem,f)=>{setClock(S,rem,f);S.clock.classList.toggle('low',rem<10000);},()=>finish());
+  else setProgress(S,0,N,`0 of ${N}`);
+  S.root.querySelector('.quit').addEventListener('click',()=>save());
+  function pickNext(){
+    const i=reask.findIndex(r=>r.due<=asked);
+    if(i>=0)return reask.splice(i,1)[0].q;
+    if(N&&fresh>=N)return reask.length?reask.shift().q:null;
+    fresh++;
+    if(pre.length)return pre.shift();
+    return cfg.source();
+  }
+  function next(){
+    if(ended)return;
+    cur=pickNext();if(!cur)return finish();
+    asked++;busy=false;
+    if(!cfg.dur)setProgress(S,fresh-1,N,`${Math.min(fresh,N)} of ${N}`);
+    const big=!cur.long&&!cur.seq;
+    S.stage.classList.toggle('top',!big);
+    const len=(cur.q||'').length,size=len<=9?'s1':len<=13?'s2':'s3';
+    const prompt=cur.seq?`<div class="seq">${seqHTML(cur.seq,false)}</div>`:cur.long?`<p class="oq">${esc(cur.q)}</p>`:`<div class="problem ${size}">${cur.html||esc(cur.q)}</div>`;
+    const tag=cur.again?'Again: you missed this one':cur.fromMiss?'Missed last time':'';
+    const label=cfg.dur?`Question ${asked}${tag?' · '+tag.toLowerCase():''}`:tag;
+    S.stage.innerHTML=`<div class="qnum">${label}</div>${cur.sub?`<p class="sub">${esc(cur.sub)}</p>`:''}${prompt}${cur.kind==='type'?`<div class="entry"><span class="ev"></span>${cur.unit?`<span class="unit">${esc(cur.unit)}</span>`:''}</div><p class="hint">${esc(cur.hint||(cur.slash?'Use / for fractions':''))}</p>`:''}<div class="fb-slot"></div>`;
+    S.stage.scrollTop=0;S.controls.innerHTML='';
+    if(cur.kind==='type'){
+      const ev=S.stage.querySelector('.ev'),hint=S.stage.querySelector('.hint');
+      const auto=!cur.paced&&/^\d+$/.test(cur.ans)?cur.ans.length:0;
+      cur.kp=keypad(S.controls,{neg:!!cur.neg,dot:!!cur.dot,slash:!!cur.slash,max:10,autoLen:auto,onChange:v=>{ev.textContent=v;},onSubmit:v=>{const x=parseAns(v);if(isNaN(x)){hint.textContent='That is not a complete number yet.';return;}answer(v,x,null);}});
+    }else{
+      S.controls.innerHTML=`<div class="${cur.opts.length===2?'mc2':'ostack'}">${cur.opts.map(o=>`<button class="opt" type="button" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
+      S.controls.firstChild.addEventListener('pointerdown',e=>{const b=e.target.closest('.opt');if(!b)return;e.preventDefault();answer(b.dataset.v,null,b);});
+    }
+    cur.t0=performance.now();
+  }
+  function answer(raw,x,btn){
+    if(busy||ended)return;busy=true;
+    const q=cur,ms=performance.now()-q.t0;
+    const ok=q.kind==='mc'?raw===q.ans:(q.tol?Math.abs(x-q.x)<=q.tol:near(x,q.x));
+    if(q.kp)q.kp.lock(true);
+    if(q.key)factRec(q.key,ok,ms);
+    log.push({lv:q.lv,first:!q.again,ok,ms,q:q.q,ans:q.ans+(q.unit||''),your:raw});
+    if(ok){correct++;S.score.textContent=correct;if(q.fromMiss)missDrop(q);}
+    else{
+      buzz();missAdd(q);
+      if((q.tries||0)<2){const c=Object.assign({},q,{again:true,fromMiss:false,tries:(q.tries||0)+1});delete c.kp;reask.push({due:asked+R(2,3),q:c});}
+    }
+    save();
+    if(q.kind==='mc'){for(const b of S.controls.querySelectorAll('.opt'))if(b.dataset.v===q.ans)b.classList.add(ok?'is-right':'is-answer');if(btn&&!ok)btn.classList.add('is-wrong');}
+    if(q.paced){
+      if(clock)clock.pause();
+      if(q.seq)S.stage.querySelector('.seq').innerHTML=seqHTML(q.seq,true);
+      const h=S.stage.querySelector('.hint');if(h)h.remove();
+      S.stage.querySelector('.fb-slot').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><p class="verdict">${ok?'Correct':'Not quite'}</p>${ok?'':`<p>The answer is <b>${esc(q.ans)}${esc(q.unit||'')}</b>.</p>`}<p>${esc(q.ex||'')}</p>${!ok&&(q.tries||0)<2?'<p class="exact">This one comes back in a few questions.</p>':''}</div>`;
+      if(q.kind==='type')S.controls.innerHTML='';
+      nextButton(S.controls,(N&&fresh>=N&&!reask.length)?'See results':'Next',()=>{if(clock)clock.resume();next();});
+    }else if(ok){later(next,120);}
+    else{
+      const line=q.ex?esc(q.ex):q.kind==='mc'?esc(q.ans):`${esc(q.q)} = <b>${esc(q.ans)}${esc(q.unit||'')}</b>`;
+      S.stage.querySelector('.fb-slot').innerHTML=`<p class="fbline"><span class="bad">${raw===null?'Time':'Not quite.'}</span> ${line}</p>`;
+      later(next,q.ex?2200:1300);
+    }
+  }
+  function finish(){
+    if(ended)return;ended=true;if(clock)clock.stop();
+    const firsts=log.filter(l=>l.first&&(!L||l.lv===L.id)),n=firsts.length,okN=firsts.filter(l=>l.ok).length;
+    const acc=n?okN/n:0,med=median(firsts.filter(l=>l.ok).map(l=>l.ms));
+    const prev=best(cfg.hid);record(cfg.hid,okN);
+    const lines=[['Right on first try',`${okN} of ${n}`],['Accuracy',n?Math.round(acc*100)+'%':'none'],['Median time when right',secs(med)]];
+    const again=log.filter(l=>!l.first);if(again.length)lines.push(['Re-asked misses',`${again.filter(l=>l.ok).length} of ${again.length} right`]);
+    let msg='',more=[];
+    if(L){
+      const st=lvState(L.id),minN=L.mode==='paced'?LEVEL_N:10,was=mastered(L.id);
+      const pass=n>=minN&&acc>=0.9&&med!==null&&med<=L.limit*1000;
+      st.runs++;st.lastAcc=acc;st.lastMed=med;
+      if(st.bestAcc===undefined||acc>st.bestAcc||(acc===st.bestAcc&&med!==null&&(st.bestMed===null||med<st.bestMed))){st.bestAcc=acc;st.bestMed=med;}
+      const d=today(),already=st.days.indexOf(d)>=0;
+      if(pass&&!already){st.days.push(d);if(st.days.length>6)st.days.splice(0,st.days.length-6);}
+      save();
+      lines.push(['Limit',`${L.limit.toFixed(1)} s median, 90% right`]);
+      const why=[];if(n<minN)why.push(`answer at least ${minN} questions`);if(n&&acc<0.9)why.push(`get 90% right (you got ${Math.round(acc*100)}%)`);if(med!==null&&med>L.limit*1000)why.push(`bring the median under ${L.limit.toFixed(1)} s (yours was ${secs(med)})`);if(med===null&&n>=minN)why.push('get some right');
+      if(!pass)msg=`<p class="note">Not a pass yet. To pass, ${why.join(' and ')}.</p>`;
+      else if(mastered(L.id)&&!was)msg=`<p class="pb">Level mastered</p><p class="note">Two passes on different days. Keep it fresh with the daily warm-up.</p>`;
+      else if(was)msg=`<p class="note">Pass. This level is already mastered.</p>`;
+      else if(already)msg=`<p class="note">Pass, but you already passed today. Pass again on another day to master this level.</p>`;
+      else msg=`<p class="pb">Pass 1 of 2</p><p class="note">Pass again on another day to master this level.</p>`;
+      const idx=LEVELS.indexOf(L),nx=LEVELS.slice(idx+1).find(l=>l.grp===L.grp);
+      if(nx)more.push([`Next: ${nx.id} ${nx.name}`,()=>lvIntro(nx)]);
+    }
+    const miss=log.filter(l=>l.first&&!l.ok);
+    const missHTML=miss.length?`<h2 class="h-sm">Missed</h2><ul class="misses">${miss.slice(0,30).map(m=>`<li><span>${esc(m.q)} = <b>${esc(m.ans)}</b></span><span class="you">${m.your===null?'no answer':'you: '+esc(m.your)}</span></li>`).join('')}</ul><p class="note">Misses come back at the start of your next session.</p>`:'';
+    results({id:cfg.hid,prevBest:prev,title:cfg.title,big:okN,unit:'right',lines,html:msg+missHTML,again:cfg.again,more});
+  }
+  next();
+}
+
+/* ---------- level screens ---------- */
+function lvIntro(L){
+  clearScreen();
+  const st=store.lv[L.id],first=!st||!st.runs,m=mastered(L.id),misses=(store.miss[L.id]||[]).length;
+  const fmtTxt=L.mode==='fast'?(L.keys&&L.keys[0].startsWith('f:')||L.keys&&L.keys[0].startsWith('pc:')?'60 seconds. Type the answer and press Enter.':L.keys&&L.keys[0].startsWith('pr:')?'60 seconds. Tap Prime or Not prime.':'60 seconds. Type the answer; it is entered as soon as it has enough digits.'):`${LEVEL_N} questions, no time limit. A worked solution follows every answer.`;
+  const stTxt=m?'<b class="good">Mastered.</b>':st&&st.days.length?`<b>Passed once</b> (${st.days[st.days.length-1]}). One more pass on another day masters it.`:'Not passed yet.';
+  const d=document.createElement('div');d.className='page';
+  d.innerHTML=`<button class="back" type="button">Back</button><p class="kicker">${L.id} · ${GRP_NAME[L.grp]}${L.opt?' · optional':''}</p><h1 class="page-title sm">${esc(L.name)}</h1>
+<div class="howto"><p>${fmtTxt}</p><p>A run passes with 90% right and a median time under ${L.limit.toFixed(1)} s. Two passes on different days master the level.</p><p>${stTxt}</p></div>
+<details class="card"${first?' open':''}><summary>How to think</summary><div class="card-body">${L.card}</div></details>
+${misses?`<p class="note">${misses} missed ${misses===1?'question':'questions'} from earlier come first.</p>`:''}
+<div class="hist"></div><button class="primary start" type="button">Start</button>`;
+  app.appendChild(d);
+  d.querySelector('.back').addEventListener('click',()=>home());
+  const sx=stats(L.id);if(sx&&sx.n>1)d.querySelector('.hist').innerHTML=`<p class="hist-line">${sx.n} runs, best ${sx.best} right</p>${spark(sx.list)}`;
+  d.querySelector('.start').addEventListener('click',()=>runLevel(L));
+}
+function runLevel(L){
+  const pre=(store.miss[L.id]||[]).slice(0,5).map(q=>Object.assign({},q,{fromMiss:true}));
+  runSession({title:`${L.id} ${L.name}`,hid:L.id,level:L,dur:L.mode==='fast'?60000:0,N:L.mode==='paced'?LEVEL_N:0,pre,source:levelSource(L),again:()=>runLevel(L)});
+}
+function runWarm(){
+  const ms=[];for(const id in store.miss)for(const q of store.miss[id])ms.push(q);
+  ms.sort((a,b)=>(b.ts||0)-(a.ts||0));
+  const pre=ms.slice(0,10).map(q=>Object.assign({},q,{fromMiss:true}));
+  const slow=Object.keys(store.facts).filter(k=>factColor(k)!=='green'&&levelOfKey(k)).sort((a,b)=>slowScore(b)-slowScore(a)).slice(0,10);
+  const sq=shuffle(slow.concat(slow));
+  for(let i=1;i<sq.length;i++)if(sq[i]===sq[i-1]){const j=(i+2)%sq.length;const t=sq[i];sq[i]=sq[j];sq[j]=t;}
+  for(const k of sq)pre.push(prepQ(factQ(k),LV[levelOfKey(k)]));
+  const mast=LEVELS.filter(l=>mastered(l.id)),ml=mast.length?pick(mast):LV[suggested('A')||'A1'];
+  runSession({title:'Daily warm-up',hid:'warm',level:null,dur:300000,pre,source:levelSource(ml),again:runWarm});
+}
+function runFacts(keys,title,hid){
+  runSession({title,hid,level:null,dur:60000,source:factSource(keys),again:()=>runFacts(keys,title,hid)});
+}
+
+/* ---------- home ---------- */
+let installEvt=null;
+function home(){
+  clearScreen();
+  const tab=store.set.tab==='progress'?'progress':'train';
+  const d=document.createElement('div');d.className='page';
+  d.innerHTML=`<div class="home-head"><h1 class="title"><span class="mark">OA drills</span></h1><div class="head-btns">${installEvt?'<button class="theme-btn" type="button" data-a="install">Install app</button>':''}<button class="theme-btn" type="button" data-a="theme">Theme: ${esc(store.set.theme)}</button></div></div>
+<div class="tabs" role="tablist"><button class="tab" type="button" role="tab" data-tab="train" aria-selected="${tab==='train'}">Train</button><button class="tab" type="button" role="tab" data-tab="progress" aria-selected="${tab==='progress'}">Progress</button></div>
+<div class="tab-body"></div>`;
+  app.appendChild(d);
+  const body=d.querySelector('.tab-body');
+  if(tab==='train')trainTab(body);else progressTab(body);
+  d.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;store.set.tab=b.dataset.tab;save();home();});
+  d.querySelector('[data-a="theme"]').addEventListener('click',()=>{const o=['auto','light','dark'];store.set.theme=o[(o.indexOf(store.set.theme)+1)%3];save();applyTheme();home();});
+  const ib=d.querySelector('[data-a="install"]');if(ib)ib.addEventListener('click',async()=>{const ev=installEvt;installEvt=null;try{ev.prompt();await ev.userChoice;}catch(e){}home();});
+}
+function trainTab(body){
+  const row=(go,name,desc,sid)=>{const st=stats(sid||go);return `<button class="row" type="button" data-go="${go}"><span class="code t">Test</span><span class="r-main"><span class="r-name">${name}</span><span class="r-desc">${desc}</span></span><span class="r-score">${st?`Best ${num(st.best)}<small>Last ${num(st.last)}</small>`:'<small>Not tried</small>'}</span></button>`;};
+  const nx={A:suggested('A'),S:suggested('S'),P:suggested('P')};
+  const lrow=L=>{
+    const st=store.lv[L.id],m=mastered(L.id),isN=nx[L.grp]===L.id,miss=(store.miss[L.id]||[]).length;let right;
+    if(m)right='<span class="st ok">Mastered</span>';
+    else if(st&&st.days.length)right='<span class="st">Passed 1 of 2</span>';
+    else if(st&&st.runs)right=`<small>Best ${Math.round(st.bestAcc*100)}%${st.bestMed?`, ${secs(st.bestMed)}`:''}</small>`;
+    else right='<small>Not tried</small>';
+    return `<button class="row${isN?' is-next':''}${m?' is-done':''}" type="button" data-lv="${L.id}"><span class="code">${L.id}</span><span class="r-main"><span class="r-name">${esc(L.name)}${L.opt?' <em>optional</em>':''}</span><span class="r-desc">${esc(L.desc)}${miss?` · ${miss} to redo`:''}</span></span><span class="r-score">${isN?'<span class="nx">Next</span>':''}${right}</span></button>`;
+  };
+  const grp=g=>LEVELS.filter(L=>L.grp===g).map(lrow).join('');
+  const mN=LEVELS.filter(L=>mastered(L.id)).length,missT=Object.values(store.miss).reduce((s,a)=>s+a.length,0);
+  const slowT=Object.keys(store.facts).filter(k=>factColor(k)!=='green'&&levelOfKey(k)).length;
+  const wp=[];if(missT)wp.push(`${Math.min(10,missT)} recent ${missT===1?'miss':'misses'}`);if(slowT)wp.push(`your ${Math.min(10,slowT)} slowest ${slowT===1?'fact':'facts'}`);
+  const wl=mN?'one mastered level':(()=>{const L=LV[suggested('A')||'A1'];return `${L.id} ${L.name}`;})();
+  body.innerHTML=`<button class="warm" type="button" data-go="warm"><b>Daily warm-up</b><span>5 minutes: ${wp.length?wp.join(', ')+', then ':''}${esc(wl)}.</span></button>
+<p class="lede">Work down each ladder. The yellow marker shows the next level to master. ${mN} of ${LEVELS.length} levels mastered.</p>
+<section class="sec"><h2>Arithmetic</h2><p class="sec-note">Single facts first, then bigger numbers.</p><div class="rows">${grp('A')}${row('sprint','Sprint','Two minutes on one topic','sprint-'+store.set.sprintCat)}${row('m80','80 in 8','The full timed mental math test')}</div></section>
+<section class="sec"><h2>Sequences</h2><p class="sec-note">One pattern per level, then all of them mixed.</p><div class="rows">${grp('S')}${row('seq','Mixed sequences','15 sequences, one minute each')}</div></section>
+<section class="sec"><h2>Probability</h2><p class="sec-note">Exact fractions first, then estimates and expected value.</p><div class="rows">${grp('P')}${row('odds','Beat the odds','10 mixed questions, 90 seconds each')}</div></section>
+<section class="sec"><h2>Zap-N games</h2><p class="sec-note">Short games for memory, speed, attention and risk.</p><div class="rows">${row('pin','Pincode','Remember a code that keeps growing')}${row('cc','Code compare','Find the exact match as time shrinks')}${row('ts','Task switch','Follow a rule that keeps changing')}${row('bal','Balloon','Pump for points before it pops')}${row('mt','Make the target','Combine four numbers to hit a target')}</div></section>
+<p class="foot">Progress is saved on this phone. Back it up from the Progress tab.</p>`;
+  body.addEventListener('click',e=>{const b=e.target.closest('[data-go],[data-lv]');if(!b)return;if(b.dataset.lv)lvIntro(LV[b.dataset.lv]);else GO[b.dataset.go]();});
+}
+
+/* ---------- progress tab ---------- */
+const GRIDS={
+  '×':{lab:(r,c)=>`${r} × ${c} = ${r*c}`,key:(r,c)=>`m:${Math.min(r,c)},${Math.max(r,c)}`,rows:'first number',cols:'second number'},
+  '+':{lab:(r,c)=>`${r} + ${c} = ${r+c}`,key:(r,c)=>`a:${Math.min(r,c)},${Math.max(r,c)}`,rows:'first number',cols:'second number'},
+  '−':{lab:(r,c)=>`${r+c} ${MINUS} ${r} = ${c}`,key:(r,c)=>`s:${r},${c}`,rows:'number taken away',cols:'answer'},
+  '÷':{lab:(r,c)=>`${r*c} ÷ ${r} = ${c}`,key:(r,c)=>`d:${r},${c}`,rows:'divisor',cols:'answer'},
+};
+const GRID_N=13;
+const sel=new Set();let selMode=false;
+const CHIP_SETS=[['Squares',range(24).map(i=>[`q:${i+2}`,`${i+2}²`])],['Cubes',range(9).map(i=>[`c:${i+2}`,`${i+2}³`])],['Powers of 2',range(9).map(i=>[`p:${i+2}`,`2${sup(i+2)}`])]];
+function factInfo(key,lab){
+  const f=store.facts[key];if(!f||!f.n)return `<b>${esc(lab)}</b> · not tried yet`;
+  const col={g0:'not tried',red:'slow or missed last time',yellow:'getting there',green:'automatic'}[factColor(key)];
+  return `<b>${esc(lab)}</b> · ${col} · last times ${f.t.length?f.t.slice(-3).map(t=>(t/1000).toFixed(1)).join(', ')+' s':'none'} · ${f.s} right in a row`;
+}
+function progressTab(body){
+  const op=GRIDS[store.set.grid]?store.set.grid:'×',G=GRIDS[op];
+  let cells='<span class="mg h"></span>';
+  for(let c=1;c<=GRID_N;c++)cells+=`<button class="mg h" type="button" data-col="${c}">${c}</button>`;
+  for(let r=1;r<=GRID_N;r++){cells+=`<button class="mg h" type="button" data-row="${r}">${r}</button>`;for(let c=1;c<=GRID_N;c++){const k=G.key(r,c);cells+=`<button class="mg f-${factColor(k)}${sel.has(k)?' sel':''}" type="button" data-k="${k}" data-r="${r}" data-c="${c}" aria-label="${esc(G.lab(r,c))}"></button>`;}}
+  const chips=CHIP_SETS.map(([name,list])=>`<p class="chip-title">${name}</p><div class="fchips">${list.map(([k,l])=>`<button class="fchip f-${factColor(k)}${sel.has(k)?' sel':''}" type="button" data-k="${k}" data-l="${esc(l)}">${l}</button>`).join('')}</div>`).join('');
+  const tried=Object.keys(store.facts).filter(k=>store.facts[k].n),auto=tried.filter(k=>factColor(k)==='green').length;
+  body.innerHTML=`<p class="lede">${tried.length?`${auto} of the ${tried.length} facts you have tried are automatic.`:'Train a few fact levels and every fact you answer shows up here.'} Green means right 3 times in a row with a median under 1.5 s.</p>
+<section class="sec"><h2>Speed matrix</h2><p class="sec-note">One cell per fact. Rows: ${G.rows}. Columns: ${G.cols}.</p>
+<div class="chips op-chips" role="group" aria-label="Operation">${Object.keys(GRIDS).map(o=>`<button class="chip" type="button" data-op="${o}" aria-pressed="${o===op}">${o}</button>`).join('')}</div>
+<div class="legend"><span><i class="f-green"></i>under 1.5 s, 3 in a row</span><span><i class="f-yellow"></i>under 3 s</span><span><i class="f-red"></i>slow or missed</span><span><i class="f-g0"></i>not tried</span></div>
+<div class="mgrid">${cells}</div>
+<p class="cell-info">${selMode?'Tap cells to select them. Tap a row or column number to select the whole line.':'Tap a cell to see its times.'}</p>
+</section>
+<section class="sec"><h2>Squares, cubes and powers</h2>${chips}</section>
+<div class="sel-panel"><div class="btn-row"><button class="${selMode?'primary':'ghost'}" type="button" data-a="mode">${selMode?'Done selecting':'Select facts'}</button>${sel.size?`<button class="primary" type="button" data-a="drill">Drill ${sel.size} selected</button><button class="ghost" type="button" data-a="clear">Clear</button>`:''}<button class="ghost" type="button" data-a="weak">Drill weak ${op} facts</button></div></div>
+<section class="sec bk-sec"><h2>Backup</h2><p class="sec-note">Progress lives in this browser on this phone. Export it to keep a copy or move it to another phone.</p>
+<div class="btn-row"><button class="ghost" type="button" data-a="export">Export progress</button><button class="ghost" type="button" data-a="import">Import progress</button></div><div class="bk"></div></section>`;
+  const info=body.querySelector('.cell-info');
+  body.addEventListener('click',e=>{
+    const t=e.target.closest('button');if(!t)return;
+    if(t.dataset.op){store.set.grid=t.dataset.op;save();home();return;}
+    const a=t.dataset.a;
+    if(a==='mode'){selMode=!selMode;home();return;}
+    if(a==='clear'){sel.clear();home();return;}
+    if(a==='drill'){const ks=[...sel];runFacts(ks,'Selected facts','custom');return;}
+    if(a==='weak'){const ks=[];for(let r=1;r<=GRID_N;r++)for(let c=1;c<=GRID_N;c++){const k=G.key(r,c);if(ks.indexOf(k)<0&&factColor(k)!=='green')ks.push(k);}runFacts(ks.length?ks:[G.key(2,2)],`Weak facts: ${op}`,'weak');return;}
+    if(a==='export'){backupExport(body.querySelector('.bk'));return;}
+    if(a==='import'){backupImport(body.querySelector('.bk'));return;}
+    const line=t.dataset.row?[...Array(GRID_N)].map((_,i)=>G.key(+t.dataset.row,i+1)):t.dataset.col?[...Array(GRID_N)].map((_,i)=>G.key(i+1,+t.dataset.col)):null;
+    if(line){if(!selMode){selMode=true;}const allIn=line.every(k=>sel.has(k));for(const k of line){if(allIn)sel.delete(k);else sel.add(k);}home();return;}
+    const k=t.dataset.k;if(!k)return;
+    if(selMode){if(sel.has(k))sel.delete(k);else sel.add(k);
+      for(const el of body.querySelectorAll(`[data-k="${k}"]`))el.classList.toggle('sel',sel.has(k));
+      updSel();return;}
+    const lab=t.dataset.l?`${t.dataset.l} = ${factQ(k).x}`:G.lab(+t.dataset.r,+t.dataset.c);info.innerHTML=factInfo(k,lab);
+  });
+  function updSel(){
+    const p=body.querySelector('.sel-panel .btn-row');
+    p.innerHTML=`<button class="primary" type="button" data-a="mode">Done selecting</button>${sel.size?`<button class="primary" type="button" data-a="drill">Drill ${sel.size} selected</button><button class="ghost" type="button" data-a="clear">Clear</button>`:''}<button class="ghost" type="button" data-a="weak">Drill weak ${op} facts</button>`;
+  }
+}
+
+/* ---------- backup ---------- */
+function backupText(){return JSON.stringify({app:'oa-drills',ver:2,exported:new Date().toISOString(),store});}
+function backupExport(box){
+  const txt=backupText(),name=`oa-drills-backup-${today()}.json`;
+  box.innerHTML=`<p class="note">Save the file, or copy the text and keep it somewhere safe.</p><div class="btn-row"><button class="primary" type="button" data-b="file">Save file</button><button class="ghost" type="button" data-b="copy">Copy text</button></div><textarea class="bk-text" readonly></textarea><p class="msg"></p>`;
+  const ta=box.querySelector('textarea'),msg=box.querySelector('.msg');ta.value=txt;
+  box.querySelector('[data-b="file"]').addEventListener('click',()=>{try{const u=URL.createObjectURL(new Blob([txt],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);msg.textContent='File saved to your downloads.';}catch(e){msg.textContent='Saving a file is blocked here. Copy the text instead.';}});
+  box.querySelector('[data-b="copy"]').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(txt);msg.textContent='Copied.';}catch(e){ta.focus();ta.select();msg.textContent='Select all the text in the box and copy it.';}});
+}
+function backupImport(box){
+  box.innerHTML=`<p class="note">Choose a backup file, or paste backup text. Importing replaces the progress on this phone.</p><div class="btn-row"><label class="ghost file-btn">Choose file<input type="file" accept="application/json,.json,text/plain" hidden></label></div><textarea class="bk-text" placeholder="Or paste backup text here"></textarea><div class="btn-row"><button class="primary" type="button" data-b="go">Import pasted text</button></div><p class="msg"></p>`;
+  const ta=box.querySelector('textarea'),msg=box.querySelector('.msg'),go=box.querySelector('[data-b="go"]');let armed=null;
+  function apply(txt){
+    let p;try{p=JSON.parse(txt);}catch(e){msg.textContent='That is not a valid backup.';return;}
+    const s=p&&p.app==='oa-drills'&&p.store?p.store:(p&&p.hist?p:null);
+    if(!s||typeof s!=='object'){msg.textContent='That is not an OA drills backup.';return;}
+    if(armed!==txt){armed=txt;msg.innerHTML='<b class="bad">This replaces your current progress.</b> Tap import again to confirm.';go.textContent='Confirm import';return;}
+    store.hist=s.hist&&typeof s.hist==='object'?s.hist:{};store.facts=s.facts&&typeof s.facts==='object'?s.facts:{};store.lv=s.lv&&typeof s.lv==='object'?s.lv:{};store.miss=s.miss&&typeof s.miss==='object'?s.miss:{};if(s.set&&typeof s.set==='object')Object.assign(store.set,s.set);
+    save();applyTheme();msg.innerHTML=`<b class="good">Imported.</b> ${Object.keys(store.hist).length} drills and ${Object.keys(store.facts).length} facts.`;go.textContent='Import pasted text';armed=null;
+  }
+  go.addEventListener('click',()=>apply(ta.value.trim()));
+  box.querySelector('input[type=file]').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{ta.value=String(r.result);armed=null;apply(ta.value.trim());};r.readAsText(f);});
+}
+
+/* ---------- routes ---------- */
+const GO={
+  warm(){runWarm();},
+  m80(){intro({id:'m80',title:'80 in 8',how:`<p>80 multiple-choice questions in 8 minutes: whole numbers, decimals, fractions and percentages. That is 6 seconds a question.</p><p>Tap an option to answer. A wrong tap briefly shows the right one. Skipping scores zero.</p>`,settings:toggleHTML('neg','Wrong answers cost a point'),bind:d=>bindToggle(d,'neg'),start:()=>runMM(true,'all')});},
+  sprint(){let cat=store.set.sprintCat;intro({id:'sprint-'+cat,title:'Sprint',how:`<p>Two minutes on one topic. Answer as many as you can.</p>`,
+    settings:`<div class="chips" role="group" aria-label="Topic">${SPRINT_CATS.map(c=>`<button class="chip" type="button" data-c="${c[0]}" aria-pressed="${c[0]===cat}">${c[1]}</button>`).join('')}</div>${toggleHTML('neg','Wrong answers cost a point')}`,
+    bind:(d,renderHist)=>{bindToggle(d,'neg');d.querySelector('.chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.dataset.c;store.set.sprintCat=cat;save();d.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.c===cat)));renderHist('sprint-'+cat);});},
+    start:()=>runMM(false,cat)});},
+  seq(){intro({id:'seq',title:'Sequences',how:`<p>Type the number that replaces the question mark. Answers can be negative or fractions; use / for the fraction bar.</p><p>You see the rule after every answer.</p>`,settings:toggleHTML('seqTimer','One minute per sequence'),bind:d=>bindToggle(d,'seqTimer'),start:runSeq});},
+  odds(){intro({id:'odds',title:'Beat the odds',how:`<p>10 probability and expected-value questions with 90 seconds each. The options are rounded, so choose the one closest to the exact answer.</p><p>Every answer comes with a short worked solution.</p>`,start:runOdds});},
+  pin(){intro({id:'pin',title:'Pincode',how:`<p>Digits flash one at a time. Type them back in the same order.</p><p>Get it right and the next code is one digit longer. Three mistakes end the game.</p>`,start:runPin});},
+  cc(){intro({id:'cc',title:'Code compare',how:`<p>Tap the option that exactly matches the code on top. Expect look-alikes such as O and 0, or 5 and S.</p><p>Each correct answer shortens the time for the next code. One minute in total.</p>`,start:runCC});},
+  ts(){intro({id:'ts',title:'Task switch',how:`<p>An arrow and a number appear in the top or bottom half of the box.</p><p>Top half: tap the way the arrow points. Bottom half: tap left for odd, right for even. 40 trials, and the rule changes without warning.</p>`,start:runTS});},
+  bal(){intro({id:'bal',title:'Balloon',how:`<p>16 balloons, blue and orange. Each pump adds 5 points. Collect to bank them; a pop loses that balloon's points.</p><p>Each colour pops somewhere in its own hidden range. Learn it as you play.</p>`,start:runBal});},
+  mt(){intro({id:'mt',title:'Make the target',how:`<p>Use all four numbers once each, with + ${MINUS} × ÷, to reach the target. Tap a number, an operator, then another number.</p><p>Two and a half minutes. Skip shows one solution.</p>`,start:runMT});},
+};
+if(!SPRINT_CATS.some(c=>c[0]===store.set.sprintCat))store.set.sprintCat='all';
+applyTheme();
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if(app.querySelector('.home-head'))home();});
+window.addEventListener('appinstalled',()=>{installEvt=null;});
+if('serviceWorker' in navigator&&/(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname)){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+home();
+})();
+</script>
+</body>
+</html>
