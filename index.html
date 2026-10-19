@@ -1467,7 +1467,7 @@ if(!SPRINT_CATS.some(c=>c[0]===store.set.sprintCat))store.set.sprintCat='all';
 applyTheme();
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if(app.querySelector('.home-head'))home();});
 window.addEventListener('appinstalled',()=>{installEvt=null;});
-if('serviceWorker' in navigator&&/(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname)){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+if('serviceWorker' in navigator&&(location.protocol==='https:'||/^localhost$|^127\.0\.0\.1$/.test(location.hostname))&&(()=>{try{return window.self===window.top;}catch(e){return false;}})()){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
 home();
 })();
 </script>

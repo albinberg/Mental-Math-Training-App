@@ -1,5 +1,5 @@
 // Offline cache. Bump VERSION on every release so phones drop the old files.
-const VERSION = 'oa-drills-2026-10-15-1';
+const VERSION = 'oa-drills-2026-10-19-1';
 const FILES = [
   './',
   './index.html',
